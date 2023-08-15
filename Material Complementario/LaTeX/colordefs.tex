@@ -1,0 +1,183 @@
+% Booleans for color palette definition
+\newboolean{narcel}
+\newboolean{amaazu}
+\newboolean{negdor}
+\newboolean{celbla}
+\newboolean{celro}
+\newboolean{rocel}
+\newboolean{azubla}
+\newboolean{planeg}
+\newboolean{celneg}
+\newboolean{grineg}
+\newboolean{blaneg}
+\newboolean{negbla}
+\newboolean{taller2011}
+\newboolean{celazu}
+\newboolean{UCflama}
+\newboolean{mono}
+
+\setboolean{amaazu}{true}
+
+
+% Color definitions - Pantone Coated (CVC) / Pantone Metallics Varnished (CVV)
+
+
+\definecolor{UC185}{rgb}{0.9922,0.0941,0.1647}    % {253,24,42}    rojo: Pantone 185 CVC
+\definecolor{UC136}{rgb}{1.0000,0.7255,0.2118}   % {255,185,54}   amarillo: Pantone 136 CVC
+\definecolor{UC2707}{rgb}{0.7333,0.8275,0.9059} % {187,211,231} celeste claro: Pantone 2707 CVC
+\definecolor{UC2718}{rgb}{0.3137,0.4627,0.7137} %{80,118,182} celeste: Pantone 2718 CVC
+\definecolor{UC2727}{rgb}{0.1529,0.3294,0.8275}  % {39,84,211} azul celeste: Pantone 2727 CVC
+\definecolor{UC2728}{rgb}{0.0863,0.1882,0.6510}   % {22,48,166}  azul: Pantone 2728 CVC
+\definecolor{UC871}{rgb}{0.5882,0.4706,0.2588}   % {150,120,66}  dorado: Pantone 871 CVV
+\definecolor{UC877}{rgb}{0.4863,0.5137,0.5255}  % {124,131,134}  plateado: Pantone 877 CVV
+
+\definecolor{nar01}{rgb}{0.8667,0.5020,0.2784}  % {} naranjo office
+\definecolor{cel01}{rgb}{0.5804,0.7137,0.8235}  % {148,182,210) celeste office
+\definecolor{caf01}{rgb}{0.4667,0.3725,0.3333}  % {119,95,85) cafe office
+
+\definecolor{azu01}{rgb}{0.4471,0.4863,0.6392}  % {} azul morado
+\definecolor{ver01}{rgb}{0.8236,0.8549,0.4784}  % {148,182,210) verde amarillo
+\definecolor{azu02}{rgb}{0.6235,0.7216,0.8039}  % {119,95,85) azul claro
+
+% amarillo azul UC136 UC2728
+\ifthenelse{\boolean{amaazu}}{%
+\definecolor{colorlargeA}{named}{UC136} 
+\definecolor{colorshortA}{named}{UC2728}
+\definecolor{colorlargeB}{named}{UC136} 
+\definecolor{colorshortB}{named}{UC2728}
+}{}
+
+% negro dorado black UC871
+\ifthenelse{\boolean{negdor}}{
+\definecolor{colorlargeA}{named}{black} 
+\definecolor{colorshortA}{named}{UC871}
+\definecolor{colorlargeB}{named}{black} 
+\definecolor{colorshortB}{named}{UC871}
+}{}
+
+% azul-celeste blanco UC2727 white
+\ifthenelse{\boolean{celbla}}{
+\definecolor{colorlargeA}{named}{UC2727} 
+\definecolor{colorshortA}{named}{white}
+\definecolor{colorlargeB}{named}{UC2727} 
+\definecolor{colorshortB}{named}{white}
+}{}
+
+
+% azul-celeste rojo
+\ifthenelse{\boolean{celro}}{
+\definecolor{colorlargeA}{named}{UC2727} % celeste 
+\definecolor{colorshortA}{named}{UC185}
+\definecolor{colorlargeB}{named}{UC2727} % celeste  
+\definecolor{colorshortB}{named}{UC185}
+}{}
+
+% rojo azul-celeste 
+\ifthenelse{\boolean{rocel}}{
+\definecolor{colorshortA}{named}{UC2727} % celeste 
+\definecolor{colorlargeA}{named}{UC185}
+\definecolor{colorshortB}{named}{UC2727} % celeste  
+\definecolor{colorlargeB}{named}{UC185}
+}{}
+
+% azul blanco UC2728 white
+\ifthenelse{\boolean{azubla}}{
+\definecolor{colorlargeA}{named}{UC2728} 
+\definecolor{colorshortA}{named}{white}
+\definecolor{colorlargeB}{named}{UC2728} 
+\definecolor{colorshortB}{named}{white}
+}{}
+
+% blanco azul white UC2728
+\ifthenelse{\boolean{planeg}}{
+\definecolor{colorshortA}{named}{UC877} 
+\definecolor{colorlargeA}{named}{black}
+\definecolor{colorshortB}{named}{UC877} 
+\definecolor{colorlargeB}{named}{black}
+}{}
+
+
+% negro celeste black UC2707
+\ifthenelse{\boolean{celneg}}{
+\definecolor{colorlargeA}{named}{black} 
+\definecolor{colorshortA}{named}{UC2707}
+\definecolor{colorlargeB}{named}{black} 
+\definecolor{colorshortB}{named}{UC2707}
+}{}
+
+% gris negro gray black 
+\ifthenelse{\boolean{grineg}}{
+\definecolor{colorlargeA}{named}{black} 
+\definecolor{colorshortA}{gray}{0.8}
+\definecolor{colorlargeB}{named}{black} 
+\definecolor{colorshortB}{gray}{0.8}
+}{}
+
+% blanco negro white black 
+\ifthenelse{\boolean{blaneg}}{
+\definecolor{colorlargeA}{named}{black} 
+\definecolor{colorshortA}{named}{white}
+\definecolor{colorlargeB}{named}{black} 
+\definecolor{colorshortB}{named}{white}
+}{}
+
+% negro blanco black white 
+\ifthenelse{\boolean{negbla}}{
+\definecolor{colorlargeA}{named}{white} 
+\definecolor{colorshortA}{named}{black}
+\definecolor{colorlargeB}{named}{white} 
+\definecolor{colorshortB}{named}{black}
+}{}
+
+% Office 1
+\ifthenelse{\boolean{narcel}}{
+\definecolor{colorlargeA}{named}{cel01} 
+\definecolor{colorshortA}{named}{nar01}
+\definecolor{colorlargeB}{named}{cel01} 
+\definecolor{colorshortB}{named}{nar01}
+}{}
+
+% Taller 2011
+\ifthenelse{\boolean{taller2011}}{
+\definecolor{colorlargeA}{named}{azu01} 
+\definecolor{colorshortA}{named}{ver01}
+\definecolor{colorlargeB}{named}{azu01} 
+\definecolor{colorshortB}{named}{ver01}
+}{}
+
+% celeste azul UC2707 UC2728
+\ifthenelse{\boolean{celazu}}{
+\definecolor{colorlargeA}{named}{UC2728} % texto izq.
+\definecolor{colorshortA}{named}{UC2707} % fondo izq.
+\definecolor{colorlargeB}{named}{UC2728} % fondo der.
+\definecolor{colorshortB}{named}{UC2707}  % texto der.
+}{}
+
+% izq (bgnd,fgnd): amarillo azul, der (bgnd,fgnd): plateado/gris amarillo  UC136 UC2728 UC877 UC136
+\ifthenelse{\boolean{UCflama}}{
+\definecolor{colorlargeA}{named}{UC2728} % texto izq.
+\definecolor{colorshortA}{named}{UC136} % fondo izq.
+\definecolor{colorlargeB}{named}{UC877} % fondo der.
+\definecolor{colorshortB}{named}{UC136}  % texto der.
+}{}
+
+% Mono 
+\ifthenelse{\boolean{mono}}{
+\definecolor{colorlargeA}{named}{colorlargeA} 
+\definecolor{colorshortA}{named}{colorshortA}
+\definecolor{colorlargeB}{named}{colorshortA} 
+\definecolor{colorshortB}{named}{colorlargeA}
+}{
+% \definecolor{colorlarge} {named}{colorlargeA}
+% \definecolor{colorshort}{named}{colorshortA}
+% \definecolor{colorlargeB}{named}{colorlarge} 
+% \definecolor{colorshortB}{named}{colorshort}
+}
+ \definecolor{colorlarge}{named}{colorlargeA}
+ \definecolor{colorshort}{named}{colorshortA}
+
+
+
+\definecolor{colordatehead}{named}{colorlarge} 
+\definecolor{colorseclab}{named}{colorshort} 
+\definecolor{colorchapter}{named}{colorshort}

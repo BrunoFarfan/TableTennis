@@ -1,0 +1,1020 @@
+%------------------------------------------------
+% LaTex File created by Miguel A. Torres-Torriti
+% 2008.03.22
+% REF: Assingments/Tests/
+% REF: Function References and Manual.
+%      Added on 2011.03.27 based on the 
+%      Lie Tools Package user's guide.
+%------------------------------------------------
+%1in=25.4mm=72.27pt
+%1pc=12pt (pc Pica, pt Point)
+%1pt=0.35mm
+%Matlab figure ratio X/Y = 1.28
+%
+\documentclass[11pt,letterpaper,twoside]{report}%{article}
+\def\doctitle{Plantilla \LaTeX para Informes} % Título/Tema de la Sección
+\def\docsubtitle{} % Nombre del curso
+\def\docdate{2015.05.28} % Fecha del documento
+\def\coursename{IRB2002 -- Diseño de Sistemas Robóticos} % Sigla -- Nombre del Curso
+\def\authorname{Miguel Torres} % Su nombre y apellido 
+\def\deptname{Escuela de Ingenier\'ia} % El nombre de su Escuela/Unidad Académica
+\def\orgname{Pontificia Universidad Cat\'olica de Chile} % Nombre de la Universidad
+
+\input{header.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% BEGIN DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%\sffamily
+%\ttfamily
+%\rmfamily
+\noindent
+%
+\mbox{}\\[-0.99\baselineskip]
+\setlength{\unitlength}{1mm}
+\parbox{30mm}{\includegraphics[scale=0.47]{figs/logo_uc.pdf}\\[-0.55\baselineskip]}
+\hspace*{-30mm}
+\parbox{\textwidth}{
+{\centering
+{\LARGE \bf \doctitle}\\
+%{\small {\em $\triangleleft$~\docsubtitle~$\triangleright$}}\\[-.0\baselineskip]
+}}
+\rule[0ex]{\textwidth}{.4pt}
+
+
+%%%%%%%%%% PLACE HERE THE QUESTIONS %%%%%%%%%%
+\thispagestyle{plain}
+
+% Comment the following 4 lines to supress the TOC
+\def\contentsname{\normalfont \Large Contenidos\vspace*{-1cm}}
+\vspace*{-2cm}
+\parbox[t]{\textwidth}{
+{\tableofcontents}}
+
+\section{Instrucciones para completar el documento}
+
+\begin{enumerate}
+\item En el archivo plantilla, cambie el nombre \texttt{psu\_numeros\_00.tex} por  \texttt{psu\_numeros\_00.tex}.
+\item Complete los campos:
+  \begin{enumerate}
+\item \verb|\def\doctitle{Título/Tema de la Sección}|, por ejemplo:\\
+\verb|\def\doctitle{Conjunto de los Naturales}|.
+  \item \verb|\def\docdate{2015.05.28} % Fecha del documento|
+	\item \verb|\def\coursename{AcciónPSU -- Números y Proporcionalidad}|\\
+	      \verb|              % AcciónPSU -- Nombre del Curso|
+	\item \verb|\def\authorname{Juan Pérez} % Su nombre y apellido|
+	\end{enumerate}
+\end{enumerate}
+
+
+\section{Cómo incluir una definición}\label{sec:definicion}
+
+Una\hfill definición\hfill se\hfill logra\hfill con\hfill el\hfill comando\hfill \verb|\begin{defbox}{<Nombre de Concepto>}|\hfill y \\
+\verb|\end{defbox}|. La definición Un código de ejemplo y el texto resultante se muestran a continuación.
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{center}
+\begin{defbox}{Conjunto de los Racionales}
+Se define el conjunto de los irracionales $(\mathbb Q^{*})$ como todos
+aquellos números $a$ para los cuales no existen $m$ y $n$ enteros 
+($n\neq0)$ tales que:
+$$\displaystyle a=\frac{m}{n}$$
+\end{defbox}
+\end{center}
+\end{Verbatim}
+
+\begin{center}
+\begin{defbox}{Conjunto de los Racionales}
+Se define el conjunto de los irracionales $(\mathbb Q^{*})$ como todos aquellos números $a$ para los cuales
+    no existen $m$ y $n$ enteros ($n\neq0)$ tales que:
+$$\displaystyle a=\frac{m}{n}$$
+\end{defbox}
+\end{center}
+
+
+\section{Cómo incluir una recomendación}\label{sec:recomendacion}
+
+Una recomendación (también llamada ``{\em tip}'' o nota), se logra con el comando \verb|\begin{tipbox}{}| y \verb|\end{tipbox}|. Un código de ejemplo y el texto resultante se muestran a continuación.
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{center}
+\begin{tipbox}{}
+Si $a$ es un número racional ($a\in\mathbb Q$) y $b$ es un número irracional
+($b\in\mathbb Q^{*}$) entonces:
+\begin{itemize}
+\item Si $a\neq0$, $a\cdot b$, $\displaystyle\frac{b}{a}$ y 
+$\displaystyle\frac{a}{b}$ son números irracionales.
+\item $a\pm b$ es un número irracional.
+\item Si $c$ es un número racional, $a\pm c$, $a\cdot c$ son números
+racionales. Además, si $c\neq0$, entonces $\displaystyle\frac{a}{c}$ 
+también es un número racional.
+\end{itemize}
+\tcblower
+Recuerda que $\pm$ es una abreviación para las operaciones $+$ o $-$.
+\end{tipbox}
+\end{center}
+\end{Verbatim}
+
+
+\begin{center}
+\begin{tipbox}{}
+Si $a$ es un número racional ($a\in\mathbb Q$) y $b$ es un número irracional ($b\in\mathbb Q^{*}$) entonces:
+\begin{itemize}
+\item Si $a\neq0$, $a\cdot b$, $\displaystyle\frac{b}{a}$ y $\displaystyle\frac{a}{b}$ son números irracionales.
+\item $a\pm b$ es un número irracional.
+\item Si $c$ es un número racional, $a\pm c$, $a\cdot c$ son números racionales. Además, si $c\neq0$, entonces $\displaystyle\frac{a}{c}$ también es un número racional.
+\end{itemize}
+\tcblower
+Recuerda que $\pm$ es una abreviación para las operaciones $+$ o $-$.
+\end{tipbox}
+\end{center}
+
+
+\section{Cómo incluir un ejemplo}\label{sec:ejemplo}
+
+Un ejemplo se logra con el comando \verb|\begin{exbox}{}| y \verb|\end{exbox}|. La definición Un código de ejemplo y el texto resultante se muestran a continuación.
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{exbox}{}
+¿Cuál(es) de los siguientes números es(son) irracional(es)?\\\\
+$\begin{array}{rl}
+\hspace{1.5cm}\textrm{i.-}&\, \left(\sqrt{3}\right)^0\\
+\hspace{1.5cm}\textrm{ii.-}&\,\displaystyle\frac{\pi}{2}\\
+\hspace{1.5cm}\textrm{iii.-}&\, 3\cdot\sqrt[3]{8}
+\end{array}$
+\begin{enumerate}%[a)]
+\item Solo i
+\item Solo ii
+\item i y ii
+\item ii y iii
+\item Ninguna de las anteriores
+\end{enumerate}
+\tcblower
+\textbf{Solución}
+\begin{enumerate}%[i.-]
+\item Todo número $n\neq0$ satisface $n^0=1$. Luego, 
+$\left(\sqrt{3}\right)^0=1$, que es racional.
+\item Como $\pi$ es irracional, su división por un número entero
+necesariamente será irracional. De hecho, si 
+$\displaystyle\frac{\pi}{2}$ fuera un número racional, entonces
+$\displaystyle\pi=\frac{\pi}{2}\cdot 2$ sería multiplicación de
+dos números racionales y, por lo tanto, racional, lo cual 
+conduciría a una contradicción.
+\item El segundo término del producto puede escribirse como 
+$\sqrt[3]{8}=\sqrt[3]{2^3}=2$. Luego, el producto se reduce a 
+$3\cdot2$, que es un número racional.
+\end{enumerate}
+\fcolorbox{green!45}{green!45}{Alternativa \textbf{b)}}
+\end{exbox}
+\end{Verbatim}
+
+\begin{exbox}{}
+¿Cuál(es) de los siguientes números es(son) irracional(es)?\\\\
+$\begin{array}{rl}
+\hspace{1.5cm}\textrm{i.-}&\, \left(\sqrt{3}\right)^0\\
+\hspace{1.5cm}\textrm{ii.-}&\,\displaystyle\frac{\pi}{2}\\
+\hspace{1.5cm}\textrm{iii.-}&\, 3\cdot\sqrt[3]{8}
+\end{array}$
+\begin{enumerate}%[a)]
+\item Solo i
+\item Solo ii
+\item i y ii
+\item ii y iii
+\item Ninguna de las anteriores
+\end{enumerate}
+\tcblower
+\textbf{Solución}
+\begin{enumerate}%[i.-]
+\item Todo número $n\neq0$ satisface $n^0=1$. Luego, $\left(\sqrt{3}\right)^0=1$, que es racional.
+\item Como $\pi$ es irracional, su división por un número entero necesariamente será irracional. De hecho, si $\displaystyle\frac{\pi}{2}$ fuera un número racional, entonces $\displaystyle\pi=\frac{\pi}{2}\cdot 2$ sería multiplicación de dos números racionales y, por lo tanto, racional, lo cual conduciría a una contradicción.
+\item El segundo término del producto puede escribirse como $\sqrt[3]{8}=\sqrt[3]{2^3}=2$. Luego, el producto se reduce a $3\cdot2$, que es un número racional.
+\end{enumerate}
+\fcolorbox{green!45}{green!45}{Alternativa \textbf{b)}}
+\end{exbox}
+
+\section{Cómo incluir figuras}\label{sec:figuras}
+
+Los comandos básicos para incluir una figura son:
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{figure}[htbp]  % Inicia el ambiente de figura e incrementa 
+                      % el contador de figuras.
+\begin{center}        % Centra la figura.
+
+ \includegraphics[scale=1.5]{figs/prueba.pdf} % Carga una figura llamada 
+                                              % 'prueba.pdf' ubicada en
+                                              % el folder 'figs'.
+\end{center}
+\vspace*{-1.0\baselineskip}     % Quita 1.0 líneas entre la figura y su 
+                                % texto descriptivo. 
+																
+\caption{Ejemplo con una figura en formato PDF.} % Crea un texto 
+                                                % descriptivo
+                                                % para la figura.
+\label{fig:ejemplo_figura_pdf}  % Agrega una etiqueta a la figura 
+                                % para poder referenciarla.
+\end{figure}
+\end{Verbatim}
+
+Un código similar al anterior permite generar las figuras~\ref{fig:ejemplo_figura_pdf},~\ref{fig:ejemplo_figura_jpg},~\ref{fig:ejemplo_figura_png}, las cuales se encuentran en formato PDF, JPG y PNG, respectivamente. Observe que la mejor figura es la figura~\ref{fig:ejemplo_figura_pdf} em formato PDF por sus nitidez y escalabilidad dado que está en formato vectorial.  Las figuras~\ref{fig:ejemplo_figura_jpg}, y \ref{fig:ejemplo_figura_png} se encuentran en formato raster y se {\em pixelean}.  No son escalables, por lo que debe evitar usar estos formatos salvo cuando incluirá una foto.  Para crear figuras en formato PDF puede utilizar Microsoft Visio$^\circledR$ de acuerdo a las instrucciones en el documento sobre como crear e incluir figuras.
+
+Un ejemplo de como crear un espacio para agregar una figura posteriormente se muestra en la figura~\ref{fig:invisfig}.  Está figura vacía se construyó con el siguiente código.
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{figure}[htbp]
+\begin{center}
+ %\includegraphics[scale=0.8]{}
+ \fbox{\rule{10cm}{0cm}\rule{0cm}{6cm}}
+\end{center}
+\vspace*{-\baselineskip}
+\caption{Un ejemplo de una figura vacía.}
+\label{fig:invisfig} 
+\end{figure}
+\end{Verbatim}
+
+\begin{figure}[htbp]
+\begin{center}
+ \includegraphics[scale=1.5]{figs/prueba.pdf}
+\end{center}
+\vspace*{-\baselineskip}
+\caption{Ejemplo con una figura en formato PDF.}
+\label{fig:ejemplo_figura_pdf} 
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+ \includegraphics[scale=1.5]{figs/prueba.jpg}
+\end{center}
+\vspace*{-\baselineskip}
+\caption{Ejemplo con una figura en formato JPG.}
+\label{fig:ejemplo_figura_jpg} 
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+ \includegraphics[scale=1.5]{figs/prueba.png}
+\end{center}
+\vspace*{-\baselineskip}
+\caption{Ejemplo con una figura en formato PNG.}
+\label{fig:ejemplo_figura_png} 
+\end{figure}
+
+
+\begin{figure}[htbp]
+\begin{center}
+ %\includegraphics[scale=0.8]{}
+ \fbox{\rule{10cm}{0cm}\rule{0cm}{6cm}}
+\end{center}
+\vspace*{-\baselineskip}
+\caption{Un ejemplo de una figura vacía.}
+\label{fig:invisfig} 
+\end{figure}
+
+
+\section{Cómo incluir fórmulas y expresiones matemáticas}\label{sec:formulas}
+
+Las fórmulas y expresiones matemáticas son parte del texto y siguen las mismas relgas de puntuación que una oración de texto tradicional.  Las fórmulas pueden incorporarse {\em en línea con el texto} o en forma {\em desplegada}.  En inglés se habla de {\em in-line equations} y {\em displayed equations}.
+
+Ejemplos de expresiones matemáticas en línea se encuentran en las oraciones del siguiente párrafo.  
+
+\begin{quote}
+La fórmula de Euler establece que $e^{\imnum x} =\cos(x)+\imnum\sin(x)$.  La fórmula de De Moivre establece que $(\cos(x)+\imnum\sin(x))^n = (\cos(nx)+\imnum\sin(nx))^n$.  La fórmula de De Moivre se desprende fácilmente de la fórmula de Euler dado que $(\cos(nx)+\imnum\sin(nx))^n=(e^{\imnum x})^n=e^{\imnum nx}$. La fórmula de Euler a su vez puede demostrarse empleando la serie de potencias de la función exponencial $e^x$, y las expansiones de Taylor de $\cos(x)$ y $\sin(x)$.  La expansión en series de potencias de $e^z$ está dada por $e^z = 1 + \frac{z}{1!} + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots = \sum_{k=0}^\infty \frac{z^k}{k!}$.  La serie anterior evaluada en $z=\imnum x$ resulta después de reordenar los términos en 
+$e^{ix} = \left ( 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \frac{x^8}{8!} - \ldots \right )
+        + \imnum \left ( x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \ldots \right )$, donde las series entre paréntesis corresponden respectivamente a las series de Maclaurin de las funciones $\cos(x)$ y $\sin(x)$.
+\end{quote}
+
+En el párrafo anterior, las expresiones grandes son díficiles de leer porque se encuentran apretadas por el texto en las líneas anteriores y posteriores a las expresiones.  Para evitar este problema es que se utilizan ecuaciones desplegadas como se muestra en el siguiente párrafo.
+
+\begin{quote}
+La fórmula de Euler establece que $e^{\imnum x} =\cos(x)+\imnum\sin(x)$.  La fórmula de De Moivre establece que $(\cos(x)+\imnum\sin(x))^n = (\cos(nx)+\imnum\sin(nx))^n$.  La fórmula de De Moivre se desprende fácilmente de la fórmula de Euler dado que
+$$ (\cos(nx)+\imnum\sin(nx))^n=(e^{\imnum x})^n=e^{\imnum nx}.$$
+
+La fórmula de Euler a su vez puede demostrarse empleando la serie de potencias de la función exponencial $e^x$, y las expansiones de Taylor de $\cos(x)$ y $\sin(x)$.  La expansión en series de potencias de $e^z$ está dada por 
+$$e^z = 1 + \frac{z}{1!} + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots = \sum_{k=0}^\infty \frac{z^k}{k!}.$$  La serie anterior evaluada en $z=\imnum x$ resulta después de reordenar los términos en 
+$$e^{ix} = \left ( 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \frac{x^8}{8!} - \ldots \right )
+        + \imnum \left ( x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \ldots \right ),$$ 
+donde las series entre paréntesis corresponden respectivamente a las series de Maclaurin de las funciones $\cos(x)$ y $\sin(x)$.
+\end{quote}
+
+\begin{tipbox}{}
+\begin{enumerate}
+\item Es importante notar que en el ejemplo anterior, las expresiones grandes no solamente son más fáciles de leer porque aparecen desplegadas en una línea propia, sino que el uso puntuación es esencialemente la  misma que en el párrafo con ecuaciones en línea.  En resumen, al escribir ecuaciones desplegadas debe usar la misma puntuación que utilizarías al escribir una oración cualquiera considerando que las ecuaciones deben tratarse como si fuesen palabras regulares.
+
+\item Para insterar ecuaciones o expresiones matemáticas {\em en línea} se encierra la expresión entre \$.
+\vspace*{-\baselineskip}
+\begin{center}
+\begin{tabular}{|p{65mm}|p{65mm}|}
+\hline
+\parbox[t]{6cm}{
+La fórmula de De Moivre se desprende fácilmente de la fórmula de Euler dado que
+$(\cos(nx)+\imnum\sin(nx))^n=\left (e^{\imnum x}\right )^n=e^{\imnum nx}$.}
+& \vspace*{-.5\baselineskip}
+\begin{minipage}{7cm}
+\begin{Verbatim}
+La fórmula de De Moivre se 
+desprende fácilmente de la 
+fórmula de Euler dado que
+$(\cos(nx)+\imnum\sin(nx))^n =
+ \left (e^{\imnum x}\right )^n =
+ e^{\imnum nx}$.
+
+\end{Verbatim}
+\end{minipage}
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\item Para insterar ecuaciones o expresiones matemáticas {\em desplegadas} se encierra la expresión entre \$\$ o entre \textbackslash [ y \textbackslash ].
+\vspace*{-\baselineskip}
+\begin{center}
+\begin{tabular}{|p{65mm}|p{65mm}|}
+\hline
+\parbox[t]{6cm}{
+La fórmula de De Moivre se desprende fácilmente de la fórmula de Euler dado que
+$$(\cos(nx)+\imnum\sin(nx))^n=\left (e^{\imnum x}\right )^n=e^{\imnum nx}.$$}
+& \vspace*{-.5\baselineskip}
+\begin{minipage}{7cm}
+\begin{Verbatim}
+La fórmula de De Moivre se 
+desprende fácilmente de la 
+fórmula de Euler dado que
+$$(\cos(nx)+\imnum\sin(nx))^n =
+ \left (e^{\imnum x}\right )^n=
+ e^{\imnum nx}.$$
+
+\end{Verbatim}
+\end{minipage}
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\item Para insterar ecuaciones o expresiones matemáticas {\em desplegadas} numeradas es necesario utilizar el ambiente \texttt{eqnarray}.
+\vspace*{-\baselineskip}
+\begin{center}
+\begin{tabular}{|p{65mm}|p{65mm}|}
+\hline
+\parbox[t]{6cm}{
+La fórmula de De Moivre se desprende fácilmente de la fórmula de Euler dado que
+{\small
+\begin{eqnarray}
+\hspace*{-1em}(\cos(nx)+\imnum\sin(nx))^n
+        &=&\left (e^{\imnum x}\right )^n\\
+        &=&e^{\imnum nx}.
+\end{eqnarray}
+}
+}
+& \vspace*{-.5\baselineskip}
+\begin{minipage}{7cm}
+\begin{Verbatim}
+La fórmula de De Moivre se 
+desprende fácilmente de la 
+fórmula de Euler dado que
+\begin{eqnarray}
+(\cos(nx)+\imnum\sin(nx))^n
+ &=&\left (e^{\imnum x}
+    \right )^n\\
+ &=&e^{\imnum nx}.
+\end{eqnarray}
+
+\end{Verbatim}
+\end{minipage}
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\end{enumerate}
+
+\end{tipbox}
+
+\begin{tipbox}
+
+\begin{enumerate}
+
+\item[5.] Finalmente, si hay una ecuación que debido a su relevancia considera que debe ser destacada de manera especial, esto se puede lograr con un comando específicamente creado para esta plantilla llamaodo \verb|eqbox|.  Por ejemplo, una ecuación desplegada y resaltada como:
+\begin{eqnarray}
+\eqbox{x^2 = 2\int_a^b x dx}
+\end{eqnarray}
+La expresión anterior se logra con el código:
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{eqnarray}
+\eqbox{x^2 = 2\int_a^b x dx}
+\end{eqnarray}
+\end{Verbatim}
+
+\end{enumerate}
+
+\end{tipbox}
+
+
+\section{Cómo incluir tablas o figuras en ambientes \texttt{tcolorbox}}\label{sec:tab_figs_tcolorbox}
+
+En los siguientes ejemplos se muestra como incluir una tabla o un gráfico dentro de un ambiente tipo \texttt{tcolorbox} como las cajas de definición \texttt{defbox}, las cajas de ejemplo \texttt{exbox}, y las cajas de recomendación \texttt{tipbox}.  En los ejemplos siguientes se usarán cajas de definición \texttt{defbox}, pero la explicación es igualmente válida para los otros ambientes mencionados que se basan en las cajas construidas entorno a la caja \texttt{tcolorbox}.  
+
+En un \texttt{tcolorbox} no es posible colocar un ambiente flotante \texttt{figure} o \texttt{table} a menos que inserta la tabla declarando la opción \texttt{[H]} para forzar un elemento flotante dentro de otro elemento flotante como un \texttt{tcolorbox}.  Para usar la opción \texttt{[H]} deberá haber incluido el paquete \texttt{float} (incluido por defecto en esta plantilla).  La tabla~\ref{tab:basica} es un ejemplo de una tabla básica sin escalamiento.  En cambio, la tabla~\ref{tab:basica_escalada} es un ejemplo de un tabla escalada mediante el comnado \texttt{resizebox} que es parte del paquete \texttt{graphicx} o \texttt{graphics}.
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{center}
+\begin{defbox}{Tablas en ambientes \texttt{tcolorbox}}
+Una tabla es una ordenación de datos en casillas o celdas de filas y 
+columnas como se muestra a continuación.  Esta ordenación es también 
+denominada un {\em arreglo} de datos en la que cada fila representa 
+una entrada y las columnas representan diversos datos específicos o 
+variables asociados a cada entrada.
+
+\begin{table}[H]
+\centering
+\caption{Estructura de tabla básica.}
+\label{tab:basica}
+\begin{tabular}{r|ccc}
+\multicolumn{1}{r}{}
+& \multicolumn{1}{c}{Columna 1}
+& \multicolumn{1}{c}{Columna 2}
+& \multicolumn{1}{c}{Columna 3} \\ \cline{2-4}
+Fila 1 & Celda 1,1 & Celda 1,2 & Celda 1,3 \\
+Fila 2 & Celda 2,1 & Celda 2,2 & Celda 2,3
+\end{tabular}%
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Estructura de tabla básica escalada.}
+\label{tab:basica_escalada}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{r|ccccccccc}
+\multicolumn{1}{r}{}
+& \multicolumn{1}{c}{Columna 1}
+& \multicolumn{1}{c}{Columna 2}
+& \multicolumn{1}{c}{Columna 3}
+& \multicolumn{1}{c}{Columna 4}
+& \multicolumn{1}{c}{Columna 5}
+& \multicolumn{1}{c}{Columna 6}
+& \multicolumn{1}{c}{Columna 4}
+& \multicolumn{1}{c}{Columna 5}
+& \multicolumn{1}{c}{Columna 6} \\ \cline{2-9}
+Fila 1 & Celda 1,1 & Celda 1,2 & Celda 1,3 & Celda 1,4 & 
+  Celda 1,5 & Celda 1,6 & Celda 1,7 & Celda 1,8 & Celda 1,9 \\
+Fila 2 & Celda 2,1 & Celda 2,2 & Celda 1,3 & Celda 2,4 &
+  Celda 2,5 & Celda 2,6 & Celda 2,7 & Celda 2,8 & Celda 2,9
+\end{tabular}%
+} % end resizebox
+\end{table}
+
+\end{defbox}
+\end{center}
+\end{Verbatim}
+
+
+\begin{center}
+\begin{defbox}{Tablas en ambientes \texttt{tcolorbox}}
+Una tabla es una ordenación de datos en casillas o celdas de filas y columnas como se muestra a continuación.  Esta ordenación es también denominada un {\em arreglo} de datos en la que cada fila representa una entrada y las columnas representan diversos datos específicos o variables asociados a cada entrada.
+
+\begin{table}[H]
+\centering
+\caption{Estructura de tabla básica.}
+\label{tab:basica}
+\begin{tabular}{r|ccc}
+\multicolumn{1}{r}{}
+& \multicolumn{1}{c}{Columna 1}
+& \multicolumn{1}{c}{Columna 2}
+& \multicolumn{1}{c}{Columna 3} \\ \cline{2-4}
+Fila 1 & Celda 1,1 & Celda 1,2 & Celda 1,3 \\
+Fila 2 & Celda 2,1 & Celda 2,2 & Celda 2,3
+\end{tabular}%
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Estructura de tabla básica escalada.}
+\label{tab:basica_escalada}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{r|ccccccccc}
+\multicolumn{1}{r}{}
+& \multicolumn{1}{c}{Columna 1}
+& \multicolumn{1}{c}{Columna 2}
+& \multicolumn{1}{c}{Columna 3}
+& \multicolumn{1}{c}{Columna 4}
+& \multicolumn{1}{c}{Columna 5}
+& \multicolumn{1}{c}{Columna 6}
+& \multicolumn{1}{c}{Columna 4}
+& \multicolumn{1}{c}{Columna 5}
+& \multicolumn{1}{c}{Columna 6} \\ \cline{2-9}
+Fila 1 & Celda 1,1 & Celda 1,2 & Celda 1,3 & Celda 1,4 & Celda 1,5 & Celda 1,6 & Celda 1,7 & Celda 1,8 & Celda 1,9 \\
+Fila 2 & Celda 2,1 & Celda 2,2 & Celda 1,3 & Celda 2,4 & Celda 2,5 & Celda 2,6 & Celda 2,7 & Celda 2,8 & Celda 2,9
+\end{tabular}%
+} % end resizebox
+\end{table}
+
+\end{defbox}
+\end{center}
+
+Incluir una figura en una caja de definición es igual que en el caso de las tablas.  Las figuras y tablas pueden incluirse directamente usando \texttt{includefigure} o \texttt{tabular} sin {\em rodear} estos objetos por sus ambientes \texttt{figure} o \texttt{table}.  Sin embargo, si uno quiere insertar una figura o tabla con su título enumerado en forma automática a través de \texttt{caption}, entonces será neceario añadir la opción \texttt{[H]} para forzar un elemento flotante. 
+
+\begin{Verbatim}[frame=single,framesep=5mm,rulecolor=\color{gray},numbers=left,numbersep=-10pt]
+\begin{center}
+\begin{defbox}{Figuras en ambientes \texttt{tcolorbox}}
+La primera es la figura incluida sin usar el ambiente flotante 
+\texttt{figure}, por lo que no puede usarse el comando \texttt{caption} 
+para ponerle un título enumerado automáticamente.  Sin embargo, es una 
+manera rápida y simple de incluir una figura cuando no se requiere 
+títulos adicionales.
+
+\begin{center}
+\includegraphics[scale=1.0]{figs/prueba.pdf}
+\end{center}
+
+La segunda es una figura incluida usando el ambiente flotante 
+\texttt{figure}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{figs/prueba.pdf}
+\vspace*{-1.0\baselineskip}
+\caption{Una figura dentro de una ambiente \texttt{tcolorbox}.}
+\end{figure}
+
+\end{defbox}
+\end{center}
+\end{Verbatim}
+
+\begin{center}
+\begin{defbox}{Figuras en ambientes \texttt{tcolorbox}}
+La primera es la figura incluida sin usar el ambiente flotante \texttt{figure}, por lo que no puede usarse el comando \texttt{caption} para ponerle un título enumerado automáticamente.  Sin embargo, es una manera rápida y simple de incluir una figura cuando no se requiere títulos adicionales.
+
+\begin{center}
+\includegraphics[scale=1.0]{figs/prueba.pdf}
+\end{center}
+
+La segunda es una figura incluida usando el ambiente flotante \texttt{figure}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{figs/prueba.pdf}
+\vspace*{-1.0\baselineskip}
+\caption{Una figura dentro de una ambiente \texttt{tcolorbox}.}
+\end{figure}
+
+\end{defbox}
+\end{center}
+
+
+\section{Notación}\label{sec:notacion}
+
+La notación a emplearse en los apuntes del curso debe ceñirse a la notación estándar de los textos de referencia y que se resume en:
+\begin{itemize}
+\item \url{https://en.wikipedia.org/wiki/List_of_mathematical_symbols_by_subject}
+\item \url{https://en.wikipedia.org/wiki/List_of_mathematical_symbols} 
+\end{itemize}
+
+A continuación se resumen algunos símbolos y convenciones que debemos utilizar en nuestros apuntes.  Entre paréntesis se indica el comando \LaTeX que lo genera, así como el nombre resumido que se incluye en la plantilla \texttt{header.tex}.
+
+% Create a new length to control the width of the definition column in
+% the "notation table", to be used with parbox.
+\newlength{\hdiml} % left  column width
+\newlength{\hdim}  % right column width
+\newlength{\lsk}   % line skip
+%\settowidth{\hdim}{\hspace{\textwidth}\hspace{-3cm}}
+\settowidth{\hdiml}{\hspace{.2\textwidth}}
+\settowidth{\hdim }{\hspace{.8\textwidth}}
+\setlength{\lsk  }{1.3ex}
+
+\subsection{Definiciones Generales Fundamentales}
+
+{\bf Sintáxis General}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\eqbydef $    \> Denotes definition.\\[\lsk] %formerly  :=
+$|$            \> Denota ``tal que''.\\[\lsk]
+i.e.           \> Significa ``es decir'' (en latín {\em id est}).\\[\lsk]
+e.g.           \> Significa ``por ejemplo'' (en latín {\em exempli gratia}).\\[\lsk]
+q.e.d.         \> \parbox[t]{\hdim}{Significa ``queda esto demostrado'' e indica el fin de una demostración.  En latín ``quod erat demonstrandum'' significa literalemente ``como debíase demostrar''.}\\[\lsk]
+\end{tabbing}
+
+{\bf Constantes y Símbolos Matemáticos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\pi$    \> La constante de Arquímedes $\pi=3.1415926...$.\\[\lsk]
+$e$    \> La constante de Euler $e=2.7182818...$.\\[\lsk]
+$\imnum$    \> El número imaginario $\sqrt{-1}$.\\[\lsk]
+$\varphi$   \> La razón áurea $\phi =  (1+\sqrt{5})/2 = 1.6180339...$.\\[\lsk]
+$\infty$ \> Infinito.\\[\lsk]
+\end{tabbing}
+
+
+\subsection{Teoría de Conjuntos}
+
+{\bf Construcción de Conjuntos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\emptyset$    \> Conjunto vacío. (\Verb|\emptyset|)\\[\lsk]
+$\{a,b,\ldots\}$ \> Conjunto de elementos $a$, $b$, etc.  (\Verb|\{a,b,\ldots\}|)\\[\lsk]
+$\{x:T(x)\}$ \> \parbox[t]{\hdim}{Construcción de conjuntos de elementos $x$ que satisfacen 
+                  la condición $T(x)$. % (\Verb|\{x:T(x)\}|)
+									}\\[\lsk]
+\end{tabbing}
+
+
+{\bf Operaciones con Conjuntos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$A\cup B$         \> Unión de conjuntos $A$ y $B$.\\[\lsk]
+$A\cap B$         \> Intersección de conjuntos $A$ y $B$.\\[\lsk]
+$A^C$         \> Complemento del conjungo $A$.\\[\lsk]
+$A^\circ$      \> Interior del conjunto $A$.\\[\lsk]
+$\bar{A}$      \> Cierre del conjunto $A$.\\[\lsk]
+$\flat(A)$     \> Borde del conjunto $A$.\\[\lsk]
+$A\setminus B$ \> \parbox[t]{\hdim}{Resta de conjuntos $A$ menos $B$, i.e. conjunto $A$ excluyendo aquellos elementos que pertenencen al conjunto $B$.}\\[\lsk]
+\end{tabbing}
+
+{\bf Relaciones entre Conjuntos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$A\subset B$         \> $A$ es un subconjunto propio de $B$.\\[\lsk]
+$A\subseteq B$       \> $A$ es un subconjunto de $B$.\\[\lsk]
+$A\supset B$         \> $A$ es un supraconjunto propio de $B$.\\[\lsk]
+$A\supseteq B$       \> $A$ es un supraconjunto de $B$.\\[\lsk]
+$a\in A$       \> El elemento $a$ pertenence al conjunto $A$.\\[\lsk]
+$A\ni a$       \> El conjunto $A$ posee un elemento $a$.\\[\lsk]
+$a\notin A$       \> El elemento $a$ no pertenence al conjunto $A$.\\[\lsk]
+$A\not\ni a$       \> El conjunto $A$ no posee un elemento $a$.\\[\lsk]
+\end{tabbing}
+
+
+{\bf Conjuntos de Números}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\natnums$  \> Conjunto de números enteros estrictamente positivos 
+               $\{1,2,3,\ldots\}$.\\[\lsk] %CH2
+$\intnums$  \> % Ring
+Conjunto de números enteros $\{\ldots,-2,-1,0,1,2,\ldots\}$.\\[\lsk]
+$\intnums_+$\> Conjunto de enteros no-negativos $\{0,1,2,\ldots\}$, 
+               note que $\intnums_+\equiv \natnums\cup\{0\}$.\\[\lsk] %CH2
+$\mathbb{Q}$\> Conjunto de los números racionales.\\[\lsk]
+$\reals$    \> % Field 
+               Conjunto de los números reales.\\[\lsk] %CH2
+$\reals_+$, ($\reals_-$) \> Conjunto de los reales non-negativos $[0,\infty)$  
+                            (no-positivos $(-\infty,0]$).\\[\lsk] %CH2
+$\reals^n$  \> Espacio Euclideano  $n$-dimensional.\\[\lsk] %CH2
+$\complex$  \> % Field 
+               Conjunto de los números complejos, $\complex = \{s=a+\imnum b\ |\ a\in\reals, b\in\reals\}$.\\[\lsk]
+$\complex_+$, ($\complex_-$) \> 
+             \parbox[t]{\hdim}{
+             Conjunto de los números complejos en el semi-plano derecho (izquierdo),
+             incluyendo el eje imaginario, i.e. 
+           $\complex_+\eqbydef \{a+\imnum b\in\complex~|~a\in\reals_+, b\in\reals\}$, 
+           (respectivamente, $\complex_-\eqbydef \{a+\imnum b\in\complex~|~a\in\reals_-, b\in\reals\}$).
+						}\\[\lsk] %CH5
+$\complex_+^\circ$, ($\complex_-^\circ$) \>
+           \parbox[t]{\hdim}{
+           Interior de $\complex_+$, i.e. 
+           $\complex_+^\circ\eqbydef \{a+\imnum b\in\complex~|~a,b\in\reals, a>0 \}$, 
+           (respectivamente, el interior de $\complex_-$, i.e. $\complex_-^\circ\eqbydef \{a+\imnum b\in\complex~|~a,b\in\reals, a<0 \}$).}\\[\lsk] %CH5
+
+\end{tabbing}
+
+{\bf Cardinalidad}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$|A|$ o $\#A$  \> Cardinalidad del conjunto $A$.\\[\lsk]
+\end{tabbing}
+
+
+\subsection{Aritmética}
+
+{\bf Operadores Aritméticos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$a+b$  \> Adición de $a$ y $b$.\\[\lsk]
+$a-b$  \> Sustracción de $b$ a $a$.\\[\lsk]
+$a\cdot b$ \> Multiplicación de $a$ y $b$.\\[\lsk]
+$a/b$, $a\div b$, $\frac{a}{b}$ \> División de $a$ por $b$.\\[\lsk]
+$-a$   \> Negativo del número $a$.\\[\lsk]
+$\pm a$, $\mp a$ \> Más o menos $a$, menos o más $a$.\\[\lsk]
+$(expr)$, $[expr]$ \> La expresión $expr$ entre parétesis debe ser evaluada primero.\\[\lsk] 
+\end{tabbing}
+
+{\bf Signos de Igualdad}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$a=b$  \> $a$ es igual a $b$.\\[\lsk]
+$a\neq b$  \> $a$ es distinto de $b$.\\[\lsk]
+$a\equiv b$ \> $a$ es idéntico a $b$.\\[\lsk]
+$a\approx b$ \> $a$ es aproximadamente igual a $b$.\\[\lsk]
+$a\sim b$ \> $a$ es proporcional a $b$.\\[\lsk]
+$a\propto b$ \> $a$ es proporcional a $b$.\\[\lsk]
+\end{tabbing}
+
+{\bf Comparación}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$a<b$  \> $a$ es menor a $b$.\\[\lsk]
+$a>b$  \> $a$ es mayor a $b$.\\[\lsk]
+$a\leq b$ \> $a$ es menor o igual a $b$.\\[\lsk]
+$a\geq b$ \> $a$ es mayor o igual a $b$.\\[\lsk]
+$a\ll b$ \> $a$ es mucho menor a $b$.\\[\lsk]
+$a\gg b$ \> $a$ es mucho mayor a $b$.\\[\lsk]
+\end{tabbing}
+
+{\bf Intervalos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$[a,b]$  \> Intervalo cerrado entre $a$ y $b$.\\[\lsk]
+$(a,b)$  \> Intervalo abierto entre $a$ y $b$.\\[\lsk]
+$[a,b)$ \> Intervalo entre $a$ y $b$, que incluye a $a$, pero no incluye a $b$.\\[\lsk]
+$(a,b]$ \> Intervalo entre $a$ y $b$, que no incluye a $a$, pero incluye a $b$.\\[\lsk]
+\end{tabbing}
+
+
+\newpage6
+{\bf Aritmética Básica de Números Complejos}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\mbox{Re}(s)$ \> Parte real del complejo $s$.  Si $s=a+\imnum b$, entonces $\mbox{Re}(s)=a$.\\[\lsk]
+$\mbox{Im}(s)$ \> Parte imaginaria del complejo $s$.  Si $s=a+\imnum b$, entonces $\mbox{Im}(s)=b$.\\[\lsk]
+$s^*$ \> Complejo $s$ conjugado.  Si $s=a+\imnum b$, entonces $s^*=a-\imnum b$.\\[\lsk]
+$|s|$ \> Magnitud del complejo $s$.  Si $s=a+\imnum b$, entonces $|s|=\sqrt{a^2+b^2}$.\\[\lsk]
+$\angle s$ \> Angulo del complejo $s$.  Si $s=a+\imnum b$, entonces $\angle s=\arctan(b/a)$.\\[\lsk]
+\end{tabbing}
+
+
+\subsection{Cálculo}
+
+{\bf Secuencias y series}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\sum_{i=1}^n a_i$ \> \parbox[t]{\hdim}{Sumatoria de los elementos $a_i$ desde $i=1$ hasta $i=n$, es decir $a_1+a_2+\cdots+a_{n-1}+a_n$.}\\[\lsk]
+$\sum_{i\in I} a_i$ \> Sumatoria de los elementos $a_i$ tales que $i\in I$.\\[\lsk]
+$\prod_{i=1}^n a_i$ \> \parbox[t]{\hdim}{Multiplicatoria de los elementos $a_i$ desde $i=1$ hasta $i=n$, es decir $a_1\cdot a_2\cdot \ldots \cdot a_{n-1}\cdot a_n$.}\\[\lsk]
+$\prod_{i\in I} a_i$ \> Multiplicatoria de los elementos $a_i$ tales que $i\in I$.\\[\lsk]
+$(a_n)$ \> Secuencia de elementos $a_0, a_1, a_2, \ldots$.\\[\lsk]
+$a_n\rightarrow a$ \> La secuencia $a_n$ tiende a $a$.\\[\lsk]
+\end{tabbing}
+
+{\bf Funciones}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$f:A\rightarrow B$ \> \parbox[t]{\hdim}{La función $f$ mapea el conjunto $A$ al conjunto $B$.}\\[\lsk]
+$f:x\mapsto y$ \> \parbox[t]{\hdim}{La función $f$ mapea el elemento $x$ al elemento $y$.}\\[\lsk]
+$f(x)$ \> Imagen del elemento $x$ bajo la función $f$.\\[\lsk]
+$f(\cdot)$ \> \parbox[t]{\hdim}{El argumento $\cdot$ de la función $f$ es un comodín que debe ser reemplazado por algo posteriormente.}\\[\lsk]
+$f^{-1}$ \> \parbox[t]{\hdim}{Es la función inversa de $f$.}\\[\lsk]
+$f\circ g$ \> \parbox[t]{\hdim}{Composición de las funciones $f$ y $g$.}\\[\lsk]
+\end{tabbing}
+
+
+\newpage
+\subsection{Algebra Lineal y Geometría}
+
+{\bf Geometría Elemental}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\overline{AB}$ \> \parbox[t]{\hdim}{Segmento entre los puntos $A$ y $B$.}\\[\lsk]
+$\overline{AB}$ \> \parbox[t]{\hdim}{Largo del segmento entre los puntos $A$ y $B$.}\\[\lsk]
+$\vec{AB}$ \> \parbox[t]{\hdim}{Vector entre los puntos $A$ y $B$.}\\[\lsk]
+$\angle{ABC}$ \> \parbox[t]{\hdim}{Angulo entre los segmentos $BA$ y $BC$.}\\[\lsk]
+$\triangle{ABC}$ \> \parbox[t]{\hdim}{Triángulo con vértices $A$, $B$ y $C$.}\\[\lsk]
+$\square{ABCD}$ \> \parbox[t]{\hdim}{Cuadrilátero con vértices $A$, $B$, $C$ y $D$.}\\[\lsk]
+$\ell_1\parallel\ell_2$ \> \parbox[t]{\hdim}{Líneas $\ell_1$ y $\ell_2$ son paralelas.}\\[\lsk]
+$\ell_1\nparallel\ell_2$ \> \parbox[t]{\hdim}{Líneas $\ell_1$ y $\ell_2$ no son paralelas.}\\[\lsk]
+$\ell_1\perp\ell_2$ \> \parbox[t]{\hdim}{Líneas $\ell_1$ y $\ell_2$ son perpendiculares.}\\[\lsk]
+\end{tabbing}
+
+{\bf Vectores y Matrices}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$[v_1\ v_2\ \cdots\ v_n]$ \> \parbox[t]{\hdim}{Vector fila de elementos $v_1, v_2,\ldots, v_n$.}\\[\lsk]
+$\left [
+\begin{array}{c}v_1\\ v_2\\ \vdots\\ v_n\end{array}
+\right ]$ \> \parbox[t]{\hdim}{Vector columna de elementos $v_1, v_2,\ldots, v_n$.}\\[\lsk]
+$\left [
+\begin{array}{cccc}
+a_{11}&a_{12}&\cdots&a_{1n}\\ 
+a_{21}&a_{22}&\cdots&a_{2n}\\
+\vdots&\vdots&\ddots&\vdots\\
+a_{m1}&a_{m2}&\cdots&a_{mn}
+\end{array}
+\right ]$
+ \> \parbox[t]{\hdim}{\vspace*{-\baselineskip}\hspace*{3em} Matriz de elementos $a_{ij}$ en la fila $i$ y columna $j$,\\ 
+                      \hspace*{3em} de $m$ filas y $n$ columnas.}\\[\lsk]
+\end{tabbing}
+
+{\bf Cálculo Vectorial}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\mathbf{v}\cdot \mathbf{w}$ \> \parbox[t]{\hdim}{Producto punto entre los vectores $\mathbf{v}$ y $\mathbf{w}$.}\\[\lsk]
+$\mathbf{v}\times \mathbf{w}$ \> \parbox[t]{\hdim}{Producto cruz entre los vectores $\mathbf{v}$ y $\mathbf{w}$.}\\[\lsk]
+$\mathbf{v}^T$         \> La letra $T$ superscrita denota {\em transposición} del vector $\mathbf{v}$.\\[\lsk]
+$\|\mathbf{v}\|$ \> \parbox[t]{\hdim}{Norma del vector $\mathbf{v}$.}\\[\lsk]
+$\hat{\mathbf{v}}$ \> \parbox[t]{\hdim}{Vector $\mathbf{v}$ normalizado.}\\[\lsk]
+\end{tabbing}
+
+\newpage
+{\bf Cálculo Matricial}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\mathbf{A}\cdot \mathbf{B}$ \> \parbox[t]{\hdim}{Producto de las matrices $\mathbf{A}$ y $\mathbf{B}$.}\\[\lsk]
+$\mathbf{A}^T$         \> La letra $T$ superscrita denota {\em transposición} de la matriz $\mathbf{A}$.\\[\lsk]
+$\mathbf{A}^{-1}$         \> Inversa de la matriz $\mathbf{A}$.\\[\lsk]
+$|\mathbf{A}|$ \> \parbox[t]{\hdim}{Determinante de la matriz $\mathbf{A}$.}\\[\lsk]
+$\|\mathbf{A}\|$ \> \parbox[t]{\hdim}{Norma de la matriz $\mathbf{A}$.}\\[\lsk]
+
+\end{tabbing}
+
+
+\subsection{Combinatórica}
+
+{\bf Combinatórica Elemental}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$n!$ \> \parbox[t]{\hdim}{Factorial de $n$, $n!=n\cdot (n-1)\cdot (n-2)\cdots 2\cdot 1$.}\\[\lsk]
+$\binom{n}{k}$ \> \parbox[t]{\hdim}{Coeficiente binomial $k$ de $n$, es el número de combinaciones de $k$ elementos elegidos de un total de $n$ elementos sin  repetición.}\\[\lsk]
+\end{tabbing}
+
+
+\subsection{Probabilidades y Estadística}
+
+{\bf Probabilidades y Estadística Elementales}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$P(A)$ \> \parbox[t]{\hdim}{Probabilidad del evento $A$.}\\[\lsk]
+$P(A|B)$ \> \parbox[t]{\hdim}{Probabilidad condicional del evento $A$ dado el evento $B$.}\\[\lsk]
+$E(X)$ \> \parbox[t]{\hdim}{Valor esperado de la variable aleatoria $X$.}\\[\lsk]
+$V(X)$ \> \parbox[t]{\hdim}{Varianza de la variable aleatoria $X$.}\\[\lsk]
+$\mu(X)$ \> \parbox[t]{\hdim}{Media de la variable aleatoria $X$.}\\[\lsk]
+$\sigma(X)$ \> \parbox[t]{\hdim}{Desviación estándar de la variable aleatoria $X$.}\\[\lsk]
+$\sigma^2(X)$ \> \parbox[t]{\hdim}{Varianza de la variable aleatoria $X$.}\\[\lsk]
+$\sigma(X,Y)$ \> \parbox[t]{\hdim}{Covarianza de las variables aleatorias $X$ e $Y$.}\\[\lsk]
+$\rho(X,Y)$ \> \parbox[t]{\hdim}{Correlación de las variables aleatorias $X$ e $Y$.}\\[\lsk]
+$X\sim F)$ \> \parbox[t]{\hdim}{La variable aleatoria $X$ tiene distribución $F$.}\\[\lsk]
+$X\approx F)$ \> \parbox[t]{\hdim}{La variable aleatoria $X$ tiene distribución aproximadamente $F$.}\\[\lsk]
+$\overline{x}$ \> \parbox[t]{\hdim}{Promedio de los valores $x_1,x_2,\ldots,x_n$.}\\[\lsk]
+\end{tabbing}
+
+
+\subsection{Lógica}
+
+{\bf Operadores}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$A\wedge B$ \> \parbox[t]{\hdim}{Proposición $A$ y proposición $B$.}\\[\lsk]
+$A\vee B$ \> \parbox[t]{\hdim}{Proposición $A$ o proposición $B$, o ambas.}\\[\lsk]
+$A\oplus B$ \> \parbox[t]{\hdim}{Ya sea la proposición $A$ o la proposición $B$, pero no ambas. Este operador es el llamado ``o exclusivo''.}\\[\lsk]
+$\sim A$, $\overline{A}$, $\lnot A$ \> \parbox[t]{\hdim}{La proposición $A$ negada (``no $A$'').}\\[\lsk]
+$A\Rightarrow B$ \> \parbox[t]{\hdim}{La proposición $A$ implica de $B$.}\\[\lsk]
+$A\Leftrightarrow B$ \> \parbox[t]{\hdim}{La proposición $A$ implica $B$ y viceversa.}\\[\lsk]
+\end{tabbing}
+
+{\bf Cuantificadores}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\forall x$ \> \parbox[t]{\hdim}{Para todo $x$.}\\[\lsk]
+$\exists x$ \> \parbox[t]{\hdim}{Existe al menos un elemento $x$.}\\[\lsk]
+$\exists! x$ \> \parbox[t]{\hdim}{Existe exactamente un elemento $x$.}\\[\lsk]
+$\nexists x$ \> \parbox[t]{\hdim}{No existe un elemento $x$.}\\[\lsk]
+\end{tabbing}
+
+{\bf Símbolos de Deducción}
+\begin{tabbing}
+\hspace{\hdiml} \= \hspace{\hdim} \kill
+$\Rightarrow\Leftarrow$ \> \parbox[t]{\hdim}{Contradicción.}\\[\lsk]
+$A\therefore B$ \> \parbox[t]{\hdim}{La proposición $A$ es verdadera, por lo tanto $B$ es verdadera.}\\[\lsk]
+$A\because B$ \> \parbox[t]{\hdim}{La proposición $A$ es verdadera, porque $B$ es verdadera.}\\[\lsk]
+$\blacksquare$, $\square$ \> \parbox[t]{\hdim}{q.e.d. (fin de la demostración).}\\[\lsk]
+\end{tabbing}
+
+
+
+\begin{enumerate}
+\setcounter{enumi}{\value{total}}
+\item Q1: \bu{This is bold underlined text.}
+\item Q2
+\item Q3
+
+\setcounter{total}{\value{enumi}}
+\end{enumerate}
+
+
+
+\newpage
+\section{Algunas cosas de la plantilla antigua...}
+
+En las siguientes subsecciones se muestra principalmente por motivos históricos varias cosas que formaban parte de la plantilla antigua.  En principio nada de lo que está en esta sección debiese ser utilizado en las versiones finales de los apuntes.  Sin embargo, hay algunos trucos que pueden ser interesantes, commo el ejemplo de cómo hacer listas enumeradas que parten con la numeración de la lista anterior, y cómo hacer una plantilla de manual.
+
+\subsection{Ejemplo de listas enumeradas que parten con la numeración de la lista anterior}
+
+\subsubsection{Una primera lista enumerada}\label{sec:primera_lista}
+\setcounter{total}{0}
+\begin{enumerate}
+\setcounter{enumi}{\value{total}}
+% Esta frase era antes de otra.
+\item Q1 Vea la sección \ref{sec:segunda lista}. La variable $x$ sumada a la $y$ resulta en $x+y$.
+\item Q2
+\item Q3
+
+\setcounter{total}{\value{enumi}}
+\end{enumerate}
+
+\subsubsection{Una segunda lista enumerada continuando desde la anterior}\label{sec:segunda_lista}
+\begin{enumerate}
+\setcounter{enumi}{\value{total}}
+\item Q4
+\item Q5
+\item Q6
+
+\setcounter{total}{\value{enumi}}
+\end{enumerate}
+
+\subsection{Algunos Ejemplos Enmarcados con Recuadros}
+Estos Ejemplos con  Recuadros {\em Boxed Examples} siguen el formato empleado en la plantilla antigua.  No use esta manera de hacer recuadros en los documentos nuevos.  Para hacer ejemplos enmarcados en recuadros, por favor utilice las indicaciones presentadas en la sección~\ref{sec:ejemplo}.
+
+\begin{example}
+$X \equiv$ toss a coin ($\leftarrow$ this is the {\em process}).\\[1ex]
+$x_0 = \textrm{head}$\\[1ex]
+$x_1 = \textrm{tail}$\\[1ex]
+\end{example}
+
+\begin{example}
+$X \equiv$ draw some number of candies with a spoon.\\[1ex]
+$P(X=x_i) = \frac{n_i}{N}$ where $n_i$ is the number of times the amount $x_i$  was drawn, $i=1,2,\ldots I$.\\[1ex]
+\end{example}
+
+\subsection{Algunas Definiciones Enmarcadas con Recuadros}
+Estas Definciones Emarcadas {\em Boxed Definitionss} siguen el formato empleado en la plantilla antigua.  No use esta manera de hacer recuadros en los documentos nuevos.  Para hacer definiciones enmarcadas en recuadros, por favor utilice las indicaciones presentadas en la sección~\ref{sec:definicion}.
+
+
+\defboxB[Probability Law]{
+\begin{eqnarray}
+\sum_{i=1}^{\infty} P(x_i) = 1,\hspace{4em}\int_{-\infty}^{\infty} p(x)dx = 1
+\end{eqnarray}
+}
+
+\defboxB[\parbox{0.8\textwidth}{Probabilidades no-condicionadas individuales\\{\em (}unconditional individual probabilities{\em )}}]{
+\begin{eqnarray}
+P(x_i)&=&\frac{{n_X}_i}{N},\hspace{4em} i=1,\ldots,I\\
+P(y_j)&=&\frac{{n_Y}_j}{N},\hspace{4em} j=1,\ldots,I
+\end{eqnarray}
+}
+
+\defboxB{Something in the air.}
+
+
+\chapter*{\vspace*{-2\baselineskip}Appendix: Robot Design and Engineering}\addcontentsline{toc}{chapter}{Appendix: Robot Design and Engineering}
+
+Este es un ejemplo de como incluir un apéndice y la estructura estándar de un manual de software.
+\section{General Background}
+
+\section{Procedure}
+
+\section{Function Reference}
+\frefex
+
+\subsection{recfunc}\label{ss:recfunc}
+\begin{fref}
+%\fpurp{something}
+\bfverbatim{Examples}
+Consider the Zetino basis, \verb|Z|, given in the example for the
+function \verb|zfunction| on page~\pageref{ss:zfunction}.  
+Additionally, suppose that $Z_6=[f_1,f_2]=0$, then the Zetino algebra 
+can be expressed in terms of the following 3-dimensional basis of 
+independent Zetino products, in terms of which \verb|z4| is expressed 
+(see the example for the function \verb|zfunction| on 
+page~\pageref{ss:zfunction}): 
+\begin{verbatim}
+  Z := [f0~, f1~, f0~ *f1~, f0~*(f0~ *f1~),
+         f1~*(f0~*(f0~*f1~))]
+\end{verbatim}
+\efverbatim
+\bfverbatim{Salut!}
+Carambola
+\begin{verbatim}
+Is the problem of creating something literally #@?&$!* stupid!
+\end{verbatim}
+\efverbatim
+\bfverbatim{}
+Alobmarac
+\begin{verbatim}
+Is the problem of inverting something totally silly!
+\end{verbatim}
+\efverbatim
+\end{fref}
+
+
+\begin{fref}%
+\fpurp{Calcular Pitagoras.}%
+\fsynt{\texttt{c(a,b)}}%
+\fdesc{This function computes something using the $\alpha(X)$ algorithm.%
+\begin{eqnarray}%
+c(a,b) = a^2 + b^2%
+\end{eqnarray}%
+}%
+\fargs{$v_1$\hspace{1cm}\=The value of the first argument.\\%
+\>$v_2$\>The value of the second argument.\\%
+\>$\vdots$\>\\%
+\>$v_n$\>The value of the $n$-th argument.%
+}%
+\end{fref}
+
+\end{document}
