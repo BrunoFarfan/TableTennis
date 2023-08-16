@@ -2,7 +2,7 @@
 
 #### Integrantes:
 * Bruno Farfán
-* Francísco Aguilera
+* Francisco Aguilera
 * Martín Letelier
 * Matías Moreno
 * Santiago Larraín
