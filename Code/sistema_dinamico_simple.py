@@ -12,7 +12,7 @@ class PingPong():
         self.ztrig = np.array([np.sin(np.deg2rad(self.phi)), np.cos(np.deg2rad(self.phi + 30)), -np.sin(np.deg2rad(self.phi + 60))])
         
         self.Cr0 = 0.47
-        self.Cr  = 0.47     # Coeficiente de roce de aire
+        self.Cr  = 0.47   # Coeficiente de roce de aire
         self.CM0 = 0.1
         self.CM  = 0.1      # Constante de Magnus (0.1-0.5)
         
