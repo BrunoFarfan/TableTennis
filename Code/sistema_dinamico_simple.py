@@ -3,18 +3,18 @@ import numpy as np
 
 class PingPong():
 
-    def __init__(self, x0, w0):
-        self.m     = 0.0027    # Masa de pelota en kg
-        self.r     = 0.0200    # Radio de pelota en m
-        self.R     = 0.0400    # Radio de rodillos en m
+    def __init__(self, x0= np.array([0,0,0]), w0= np.array([0,0,0])):
+        self.m     = 0.027    # Masa de pelota en kg
+        self.r     = 0.2000    # Radio de pelota en m
+        self.R     = 0.2000    # Radio de rodillos en m
         self.phi   = 180       # Rotación de sistema en 360°
         self.ytrig = np.array([np.cos(np.deg2rad(self.phi)), -np.sin(np.deg2rad(self.phi + 30)), -np.cos(np.deg2rad(self.phi + 60))])
         self.ztrig = np.array([np.sin(np.deg2rad(self.phi)), np.cos(np.deg2rad(self.phi + 30)), -np.sin(np.deg2rad(self.phi + 60))])
         
         self.Cr0 = 0.47
-        self.Cr  = 0.47   # Coeficiente de roce de aire
+        self.Cr  = 0.47     # Coeficiente de roce de aire
         self.CM0 = 0.1
-        self.CM  = 0.1    # Constante de Magnus (0.1-0.5)
+        self.CM  = 0.1      # Constante de Magnus (0.1-0.5)
         
         self.rho = 1.2928   # Densidad del aire en kg/m3
         self.g   = 9.87     # Constante de gravedad
@@ -45,9 +45,11 @@ class PingPong():
         self.x = self.x0
 
         # linear speed [m/s]
-        self.x_dot = np.array([self.r * np.mean(self.w0),0,0])
+        self.x_dot = v0
+        # self.x_dot = np.array([self.r * np.mean(self.w0),0,0])
         # angular speed [Rad/s]
-        self.W = np.array([0, np.dot(self.w0, self.ytrig), np.dot(self.w0, self.ztrig)])
+        self.W = W0
+        # self.W = np.array([0, np.dot(self.w0, self.ytrig), np.dot(self.w0, self.ztrig)])
         # Reset A
         self.update_A()
     
@@ -107,17 +109,17 @@ class PingPong():
 
         # Top-Spin
         self.CM = self.CM0
-        self.w0 = np.array([30,60,60])
         self.reset()
         print(self.W)
         xaxis, yaxis, zaxis = self.simulate()
         ax.plot3D(xaxis, yaxis, zaxis)        
         
-        # # Back-Spin
-        # self.w0 = np.array([120,15,15])
-        # self.reset()
-        # xaxis, yaxis, zaxis = self.simulate()
-        # ax.plot3D(xaxis, yaxis, zaxis)
+        # Back-Spin
+        self.reset()
+        self.W = -W0
+        self.update_A()
+        xaxis, yaxis, zaxis = self.simulate()
+        ax.plot3D(xaxis, yaxis, zaxis)
         
         ax.legend(["Ideal", "Friction", "Top-Spin", "Back-spin"]) #, "Left-Spin", "Right-spin"])
         ax.set_title("Standard throws")
@@ -129,8 +131,9 @@ class PingPong():
 if __name__ == '__main__':
     
     x0 = np.array([0,0,0.3])
-    w0 = np.array([50,50,50])
-    ball = PingPong(x0, w0)
+    v0 = np.array([8.7,0,0])
+    W0 = np.array([0,4,0])
+    ball = PingPong(x0= x0)
 
     ball.std_shots()
     
