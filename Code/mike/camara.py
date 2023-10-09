@@ -1,4 +1,3 @@
-import threading as th
 import cv2
 import numpy as np
 
@@ -8,6 +7,8 @@ class Camara:
         self.rango = rango
         self.color = None
         self.coordenadas = None
+        self.ultimas_coordenadas = None
+        self.original = None
 
         self.video = cv2.VideoCapture(numero_camara, cv2.CAP_DSHOW)
 
@@ -40,8 +41,9 @@ class Camara:
         if M["m00"] != 0:
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
+            self.ultimas_coordenadas = np.array([cX, cY])
         else:
-            cX, cY = 0, 0
+            cX, cY = self.ultimas_coordenadas
 
         cv2.circle(self.imagen_filtrada, (cX, cY), 5, (255, 255, 255), -1)
         cv2.putText(self.imagen_filtrada, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
