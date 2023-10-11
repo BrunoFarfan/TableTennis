@@ -30,17 +30,18 @@ sys4(:,:,1) = tf(Wn4^2,[1 2*zeta4*Wn4 Wn4^2]);
 %% Plot
 
 subplot(2,2,1)
-impulse(sys1, 25)
-title('sys1: \omega_{n} = 2, \zeta = 0')
+impulseplot(sys1, 25)
+title('sys1: Wn= 2, Zeta = ')
 
 subplot(2,2,2)
-impulse(sys2, 25)
-title('sys2: \omega_{n} = 2, \zeta = 0.1')
+impulseplot(sys2, 25)
+title('Subplot 2: sin(2x)')
 
 subplot(2,2,3)
-impulse(sys3, 25)
-title('sys3: \omega_{n} = 1, \zeta = 0')
+impulseplot(sys3, 25)
+title('Subplot 3: sin(4x)')
 
 subplot(2,2,4)
-impulse(sys4, 25)
-title('sys4: \omega_{n} = 1, \zeta = 0.2')
+impulseplot(sys4, 25)
+plot(x,y4)
+title('Subplot 4: sin(8x)')
