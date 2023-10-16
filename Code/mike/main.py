@@ -1,5 +1,6 @@
 import numpy as np
 import threading as th
+import cv2
 from camara import Camara
 
 
@@ -17,3 +18,10 @@ while True:
         y = video.coordenadas[1]
         print(f"Coordenadas (x, y) absolutas y en porcentaje: {x, y}, "
               f"{round(x/ancho * 100, 1), round(y/alto * 100, 1)}%")
+        
+        key = cv2.waitKey(1)
+        if key & 0xFF == ord('q'):
+            break
+
+video.video.release()
+cv2.destroyAllWindows()
