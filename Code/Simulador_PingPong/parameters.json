@@ -1,0 +1,19 @@
+{
+    "BALL_MASS" : 0.0027,
+    "BALL_RADIO" : 0.020,
+    "ROLLER_RADIO" : 0.065,
+
+    "DRAG_CONSTANT" : 0.45,
+    "AIR_DENSITY" : 1.2928,
+    "EARTH_GRAVITY" : 9.807,
+
+    "ORIGIN" : [0,0,0.47],
+    "STATE_0" : [0,0,0],
+
+    "units" : {
+        "mass" : "kilograms",
+        "lenght" : "meters",
+        "density" : "kg/m3",
+        "rotational_velocity" : "Rad/s"
+    }
+}
