@@ -135,10 +135,13 @@ class PingPong():
 if __name__ == '__main__':
     
     start_pos     = np.array([0,0,0.47])     # [m]
-    rollers_speed = np.array([330,330,330])    # [RPM]
+    rollers_speed = np.array([330,2330,330])    # [RPM]
     ball = PingPong(x0= start_pos, Rw= rollers_speed)
 
     ball.std_shots()
+
+
+
     # max_distance = (0,0)
     # for b in range(-15,16):
     #     ball.yaw = np.deg2rad(b)
@@ -149,7 +152,6 @@ if __name__ == '__main__':
     #         output = (np.linalg.norm(np.array([x[-1], y[-1], z[-1]])) , a)
     #         max_distance = max(output, max_distance, key= lambda x : x[0])
     # print(max_distance)
-
 
 
 
