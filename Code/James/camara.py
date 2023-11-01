@@ -96,7 +96,7 @@ class Camara:
                 self.move_mask = cv2.cvtColor(cv2.cvtColor(self.temp_background, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY)
                 ret, self.move_mask = cv2.threshold(self.move_mask, self.thresh, 255, cv2.THRESH_BINARY)
                 self.move_mask = cv2.morphologyEx(self.move_mask, cv2.MORPH_OPEN, self.kernel)
-                self.move_mask = cv2.dilate(self.move_mask, self.kernel, iterations= 10)
+                self.move_mask = cv2.dilate(self.move_mask, self.kernel, iterations= 5)
                 # flood_mask = np.zeros((self.move_mask.shape[0]+2, self.move_mask.shape[1]+2), np.uint8)
                 # cv2.floodFill(self.move_mask, flood_mask, (0,0), 255)
                 # self.move_mask = cv2.erode(self.move_mask, self.kernel, iterations= 25)
