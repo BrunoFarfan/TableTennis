@@ -116,4 +116,5 @@ class Camara:
             pos_horizontal = x * ANCHO_CANCHA
             angulo = np.arctan(pos_horizontal/self.distancia)
             angulo = np.rad2deg(angulo)
+            angulo = max(15.5, min(-15.5, angulo))
             return angulo
