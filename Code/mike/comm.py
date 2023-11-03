@@ -9,10 +9,11 @@ class Comunicador:
     
 
     def enviar_angulo(self, angulo, espera=0.8):
-        time.sleep(espera)
-        msgOn = f"{round(angulo)}"
-        if abs(angulo - self.angulo_anterior) > 1:
-            msgEncode = str.encode(msgOn)
-            self.comunicador.write(msgEncode)
+        if angulo != None:
+            time.sleep(espera)
+            msgOn = f"{round(angulo)}"
+            if abs(angulo - self.angulo_anterior) > 1:
+                msgEncode = str.encode(msgOn)
+                self.comunicador.write(msgEncode)
 
-            self.angulo_anterior = angulo
+                self.angulo_anterior = angulo
