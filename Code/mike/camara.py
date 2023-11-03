@@ -2,15 +2,20 @@ import cv2
 import numpy as np
 
 
+ANCHO_CANCHA = 1.525
+
 class Camara:
-    def __init__(self, numero_camara, rango=np.array([5, 20, 30])):
+    def __init__(self, numero_camara, rango=np.array([5, 20, 30]), distancia=2.74):
         self.rango = rango
         self.color = None
         self.coordenadas = None
         self.ultimas_coordenadas = None
         self.original = None
 
-        self.video = cv2.VideoCapture(numero_camara, cv2.CAP_DSHOW)
+        self.limites = [] # [izquierdo, derecho]
+        self.distancia = distancia
+
+        self.video = cv2.VideoCapture(numero_camara)
 
 
     def mouseRGB(self, event, x, y, flags, param):
@@ -22,10 +27,13 @@ class Camara:
             hsv_value = np.uint8([[[colorsB, colorsG, colorsR]]])
             hsv = cv2.cvtColor(hsv_value, cv2.COLOR_BGR2HSV)
 
-            self.lower_color = hsv - self.rango
-            self.upper_color = hsv + self.rango
+            if len(self.limites) < 2:
+                self.limites.append(x)
+            else:
+                self.lower_color = hsv - self.rango
+                self.upper_color = hsv + self.rango
 
-            self.color = hsv
+                self.color = hsv
 
 
     def iniciar(self):
@@ -47,6 +55,15 @@ class Camara:
 
         cv2.circle(self.imagen_filtrada, (cX, cY), 5, (255, 255, 255), -1)
         cv2.putText(self.imagen_filtrada, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
+        if len(self.limites) == 2:
+            izquierdo = self.limites[0]
+            derecho = self.limites[1]
+
+            cv2.line(self.imagen_filtrada, np.array([izquierdo, 0]),
+                     np.array([izquierdo, len(self.original)]), (255, 255, 255), 3)
+            cv2.line(self.imagen_filtrada, np.array([derecho, 0]),
+                     np.array([derecho, len(self.original)]), (255, 255, 255), 3)
 
         self.coordenadas = np.array([cX, cY])
 
@@ -75,8 +92,28 @@ class Camara:
             cv2.imshow('original', self.original)
             cv2.imshow('filtrada', self.imagen_filtrada)
 
+            # Prints de info:
+
+            # if self.original is not None and self.coordenadas is not None:
+            #     ancho = len(self.original[0])
+            #     alto = len(self.original)
+            #     x = self.coordenadas[0]
+            #     y = self.coordenadas[1]
+            #     print(f"Coordenadas (x, y) absolutas y en porcentaje: {x, y}, "
+            #         f"{round(x/ancho * 100, 1), round(y/alto * 100, 1)}%")
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         
         self.video.release()
         cv2.destroyAllWindows()
+
+
+    def generar_angulo(self):
+        if self.original is not None and self.coordenadas is not None:
+            x = self.coordenadas[0] - self.limites[0]
+            x = (x / (self.limites[1] - self.limites[0])) - 0.5 # Posición relativa al centro (-0.5 hasta 0.5)
+            pos_horizontal = x * ANCHO_CANCHA
+            angulo = np.arctan(pos_horizontal/self.distancia)
+            angulo = np.rad2deg(angulo)
+            return angulo
