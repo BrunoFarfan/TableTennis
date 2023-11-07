@@ -45,4 +45,4 @@ loop = False
 
 enviar_angulo(manual=True, single=not loop, angulo=0)
 
-# comunicador.stop_faulhabers()
+comunicador.stop_faulhabers()
