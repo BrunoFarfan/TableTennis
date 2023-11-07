@@ -102,19 +102,20 @@ class Camara:
             #     print(f"Coordenadas (x, y) absolutas y en porcentaje: {x, y}, "
             #         f"{round(x/ancho * 100, 1), round(y/alto * 100, 1)}%")
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            key = cv2.waitKey(1)
+            if key != -1:
                 break
         
         self.video.release()
         cv2.destroyAllWindows()
 
 
-    def generar_angulo(self):
+    def generar_angulo(self, angulo_limite=45):
         if self.original is not None and self.coordenadas is not None:
             x = self.coordenadas[0] - self.limites[0]
             x = (x / (self.limites[1] - self.limites[0])) - 0.5 # Posición relativa al centro (-0.5 hasta 0.5)
             pos_horizontal = x * ANCHO_CANCHA
             angulo = np.arctan(pos_horizontal/self.distancia)
             angulo = np.rad2deg(angulo)
-            angulo = min(15.5, max(-15.5, angulo))
+            angulo = min(angulo_limite, max(-angulo_limite, angulo))
             return angulo

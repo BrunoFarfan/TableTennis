@@ -7,13 +7,13 @@ class Comunicador:
                  puerto_faulhaber1="COM4", puerto_faulhaber2="COM5", baudrate=115200, timeout=3):
         
         self.arduino = serial.Serial(port=puerto_arduino, baudrate=baudrate, timeout=timeout)
-        self.faulhabers = [
-            serial.Serial(port=puerto_faulhaber0, baudrate=115200, timeout=timeout),
-            serial.Serial(port=puerto_faulhaber1, baudrate=115200, timeout=timeout),
-            serial.Serial(port=puerto_faulhaber2, baudrate=115200, timeout=timeout)
-        ]
+        # self.faulhabers = [
+        #     serial.Serial(port=puerto_faulhaber0, baudrate=115200, timeout=timeout),
+        #     serial.Serial(port=puerto_faulhaber1, baudrate=115200, timeout=timeout),
+        #     serial.Serial(port=puerto_faulhaber2, baudrate=115200, timeout=timeout)
+        # ]
 
-        self.start_faulhabers()
+        # self.start_faulhabers()
 
         self.angulo_anterior = 0
     
