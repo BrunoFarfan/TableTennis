@@ -24,7 +24,7 @@ class Camara:
         self.temp_background = None
         self.background = [None]*self.max_count
 
-        self.video = cv2.VideoCapture(numero_camara, cv2.CAP_DSHOW)
+        self.video = cv2.VideoCapture(numero_camara)
 
 
     def mouseRGB(self, event, x, y, flags, param):
@@ -137,6 +137,16 @@ class Camara:
 
             cv2.imshow('original', self.original)
             cv2.imshow('filtrada', self.img_out)
+
+            # Prints de info:
+
+            # if self.original is not None and self.coordenadas is not None:
+            #     ancho = len(self.original[0])
+            #     alto = len(self.original)
+            #     x = self.coordenadas[0]
+            #     y = self.coordenadas[1]
+            #     print(f"Coordenadas (x, y) absolutas y en porcentaje: {x, y}, "
+            #         f"{round(x/ancho * 100, 1), round(y/alto * 100, 1)}%")
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
