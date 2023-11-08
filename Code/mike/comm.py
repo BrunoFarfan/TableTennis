@@ -32,15 +32,15 @@ class Comunicador:
 
 
     def start_faulhabers(self):
-        msgOn = str.encode("en\n")
+        msgOn = "en\n"
         for faulhaber in self.faulhabers:
             msgEncode = str.encode(msgOn)
             faulhaber.write(msgEncode)
 
     
     def stop_faulhabers(self):
-        msgVel = str.encode("v0\n")
-        msgOff = str.encode("di\n")
+        msgVel = "v0\n"
+        msgOff = "di\n"
         for faulhaber in self.faulhabers:
             msgEncode = str.encode(msgVel)
             faulhaber.write(msgEncode)
@@ -51,20 +51,23 @@ class Comunicador:
     def enviar_velocidad(self, velocidades, espera=0.3):
         if velocidades != None:
             time.sleep(espera)
-            msgVel0, msgVel1, msgVel2 = "No enviado", "No enviado", "No enviado"
-            if abs(velocidades[0] - self.velocidades_anteriorres[0]) > 100:
+            msgVel0, msgVel1, msgVel2 = "No actualizado", "No actualizado", "No actualizado"
+            if len(velocidades) == 1:
+                velocidades = [velocidades[0], velocidades[0], velocidades[0]]
+            if abs(velocidades[0] - self.velocidades_anteriorres[0]) > 50:
                 msgVel0 = f"v{round(velocidades[0])}\n"
                 msgEncode = str.encode(msgVel0)
                 self.faulhabers[0].write(msgEncode)
-            if abs(velocidades[1] - self.velocidades_anteriorres[1]) > 100:
+                self.velocidades_anteriorres[0] = velocidades[0]
+            if abs(velocidades[1] - self.velocidades_anteriorres[1]) > 50:
                 msgVel1 = f"v{round(velocidades[1])}\n"
                 msgEncode = str.encode(msgVel1)
                 self.faulhabers[1].write(msgEncode)
-            if abs(velocidades[2] - self.velocidades_anteriorres[2]) > 100:
-                msgVel2 = f"v{round(velocidades[2])}\n"
+                self.velocidades_anteriorres[1] = velocidades[1]
+            if abs(velocidades[2] - self.velocidades_anteriorres[2]) > 50:
+                msgVel2 = f"v{-round(velocidades[2])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
                 msgEncode = str.encode(msgVel2)
                 self.faulhabers[2].write(msgEncode)
+                self.velocidades_anteriorres[2] = velocidades[2]
 
             print(f"Enviado {msgVel0, msgVel1, msgVel2}")
-
-            self.velocidades_anteriorres = velocidades

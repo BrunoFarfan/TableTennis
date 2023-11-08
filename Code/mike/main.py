@@ -8,7 +8,7 @@ class Control:
     def __init__(self):
         self.loop = True # variable para controlar loops secundarios de threads
         self.video = Camara(numero_camara=1, rango=np.array([5, 50, 50]), distancia=1.75)
-        self.comunicador = Comunicador(puerto_arduino="COM5")
+        self.comunicador = Comunicador()
         self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
         self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
@@ -40,10 +40,10 @@ class Control:
     def enviar_velocidad(self, max_speed=30000): # Función temporal para mandar velocidades manualmente
         while self.loop:
             velocidades = input("Velocidades: ")
-            velocidades = velocidades.split(",")
             try:
+                velocidades = velocidades.replace(" ", "").split(",")
                 velocidades = [max(-max_speed, min(int(velocidad), max_speed)) for velocidad in velocidades]
-                self.comunicador.enviar_velocidad(velocidades)
+                self.comunicador.enviar_velocidad(velocidades, espera=0)
             except ValueError:
                 print("Error: valores incorrectos para las velocidades")
 

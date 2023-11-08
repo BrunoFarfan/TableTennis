@@ -36,9 +36,9 @@ unsigned long newtime;
 float vel;   // Velocidad del motor Pololu en RPM
 
 // Variables de control
-const float Kp = 0.5;
-const float Ki = 0*2;//2;
-const float Kd = 0*0.1;//0.7;
+const float Kp = 0.5; //0.5;
+const float Ki = 0;//2;
+const float Kd = 0;//0.7;
 
 long angulo_ref = 0;
 long cuentas_ref;
@@ -201,7 +201,6 @@ void serialReader(){
         if (angulo_ref > 50){angulo_ref = 50;}
         if (angulo_ref < -50){angulo_ref = -50;}
                         
-        cuentas_actuales = 0;
         error_acumulado = 0;
         partida = valores_iniciales;
         message = "";}
