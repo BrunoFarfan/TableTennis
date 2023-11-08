@@ -203,7 +203,8 @@ void serialReader(){
 
         error_acumulado = 0;
         partida = valores_iniciales;
-        message = "";}
+        message = "";
+      }
       else {
         message += receivedData; // Concatena el byte leído al mensaje
             }

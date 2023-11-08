@@ -30,7 +30,8 @@ class Control:
     def enviar_angulo(self, single=False, angulo=0):
         while self.loop:
             angulo = self.video.generar_angulo()
-            self.comunicador.enviar_angulo(angulo)
+            if angulo != None:
+                self.comunicador.enviar_angulo(angulo)
         
         # Enviar un solo mensaje
         if single:

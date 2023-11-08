@@ -49,15 +49,15 @@ class Comunicador:
             faulhaber.write(msgEncode)
 
     
-    def enviar_velocidad(self, velocidades, n_iteraciones=10):
+    def enviar_velocidad(self, velocidades, n_iteraciones=20):
         if velocidades != None:
             msgVel0, msgVel1, msgVel2 = "No actualizado", "No actualizado", "No actualizado"
             if len(velocidades) == 1:
                 velocidades = [velocidades[0], velocidades[0], velocidades[0]]
             velocidades = np.array(velocidades)
             delta = (velocidades - self.velocidades_anteriores) // n_iteraciones
-            for i in range(n_iteraciones):
-                time.sleep(round(1/n_iteraciones, 1))
+            for _ in range(n_iteraciones):
+                time.sleep(round(1/n_iteraciones, 2))
                 self.velocidades_anteriores += delta
 
                 msgVel0 = f"v{round(self.velocidades_anteriores[0])}\n"
