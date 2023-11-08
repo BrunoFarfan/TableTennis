@@ -14,8 +14,8 @@
 DualVNH5019MotorShield md;
 
 // Definicion de PINs
-#define encoderPinA  18
-#define encoderPinB  20
+#define encoderPinA  20
+#define encoderPinB  21
 #define enA 9
 #define in1 23
 #define in2 22
@@ -37,7 +37,7 @@ float vel;   // Velocidad del motor Pololu en RPM
 
 // Variables de control
 const float Kp = 0.5; //0.5;
-const float Ki = 0;//2;
+const float Ki = 0*2;//2;
 const float Kd = 0;//0.7;
 
 long angulo_ref = 0;
@@ -61,18 +61,18 @@ int signo_inicial;
 void doEncoderA()
 {
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB)) {
-    encoderPos = encoderPos + 3;
+    encoderPos = encoderPos + 1;
   } else {
-    encoderPos = encoderPos - 2;
+    encoderPos = encoderPos - 1;
   }
 }
 
 void doEncoderB()
 {
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB)) {
-    encoderPos = encoderPos - 2;
+    encoderPos = encoderPos - 1;
   } else {
-    encoderPos = encoderPos + 2;
+    encoderPos = encoderPos + 1;
   }
 }
 
