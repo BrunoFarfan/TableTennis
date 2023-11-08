@@ -4,45 +4,50 @@ from camara import Camara
 from comm import Comunicador
 
 
-# Funciones para enviar datos al Arduino y Faulhabers
+class Control:
+    def __init__(self):
+        self.loop = True # variable para controlar loops secundarios de threads
+        self.video = Camara(numero_camara=1, rango=np.array([5, 50, 50]), distancia=1.75)
+        self.comunicador = Comunicador(puerto_arduino="COM5")
+        self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
+        self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
-def enviar_angulo(manual=False, single=False, angulo=0):
-    while loop:
-        if not manual:
-            angulo = video.generar_angulo()
-        comunicador.enviar_angulo(angulo)
+
+    def start(self):
+        self.angle_handler.start()
+        self.speed_handler.start()
+        self.video.iniciar()
+
+        self.manage_stop()
     
-    # Enviar un solo mensaje
-    if single:
-        comunicador.enviar_angulo(angulo)
 
-def enviar_velocidad(max_speed=30000):
-    while loop:
-        velocidades = input("Velocidades: ")
-        velocidades = velocidades.split(",")
-        try:
-            velocidades = [max(-max_speed, min(int(velocidad), max_speed)) for velocidad in velocidades]
-            comunicador.enviar_velocidad(velocidades)
-        except ValueError:
-            print("Error: valores incorrectos para las velocidades")
+    def manage_stop(self):
+        self.loop = False
+        self.comunicador.stop_faulhabers()
+        self.enviar_angulo(single=not self.loop, angulo=0)
 
 
-loop = True # variable para controlar loops secundarios de threads
+    def enviar_angulo(self, single=False, angulo=0):
+        while self.loop:
+            angulo = self.video.generar_angulo()
+            self.comunicador.enviar_angulo(angulo)
+        
+        # Enviar un solo mensaje
+        if single:
+            self.comunicador.enviar_angulo(angulo)
 
-video = Camara(numero_camara=1, rango=np.array([5, 50, 50]), distancia=1.75)
 
-comunicador = Comunicador(puerto_arduino="COM5")
+    def enviar_velocidad(self, max_speed=30000): # Función temporal para mandar velocidades manualmente
+        while self.loop:
+            velocidades = input("Velocidades: ")
+            velocidades = velocidades.split(",")
+            try:
+                velocidades = [max(-max_speed, min(int(velocidad), max_speed)) for velocidad in velocidades]
+                self.comunicador.enviar_velocidad(velocidades)
+            except ValueError:
+                print("Error: valores incorrectos para las velocidades")
 
-angle_handler = th.Thread(target=enviar_angulo, daemon=True)
-angle_handler.start()
 
-speed_handler = th.Thread(target=enviar_velocidad, daemon=True)
-speed_handler.start()
-
-video.iniciar() # Loop principal del programa, se rompe apretando 'q'
-
-loop = False
-
-enviar_angulo(manual=True, single=not loop, angulo=0)
-
-comunicador.stop_faulhabers()
+if __name__ == "__main__":
+    control = Control()
+    control.start()
