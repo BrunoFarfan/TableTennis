@@ -15,7 +15,7 @@ DualVNH5019MotorShield md;
 
 // Definicion de PINs
 #define encoderPinA  18
-#define encoderPinB  19
+#define encoderPinB  20
 #define enA 9
 #define in1 23
 #define in2 22
@@ -61,18 +61,18 @@ int signo_inicial;
 void doEncoderA()
 {
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB)) {
-    encoderPos++;
+    encoderPos = encoderPos + 3;
   } else {
-    encoderPos--;
+    encoderPos = encoderPos - 2;
   }
 }
 
 void doEncoderB()
 {
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB)) {
-    encoderPos--;
+    encoderPos = encoderPos - 2;
   } else {
-    encoderPos++;
+    encoderPos = encoderPos + 2;
   }
 }
 
@@ -200,7 +200,7 @@ void serialReader(){
         angulo_ref = (String(message)).toInt();
         if (angulo_ref > 50){angulo_ref = 50;}
         if (angulo_ref < -50){angulo_ref = -50;}
-                        
+
         error_acumulado = 0;
         partida = valores_iniciales;
         message = "";}

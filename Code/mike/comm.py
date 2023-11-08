@@ -1,5 +1,6 @@
 import time
 import serial
+import numpy as np
 
 
 class Comunicador:
@@ -17,7 +18,7 @@ class Comunicador:
         self.start_faulhabers()
 
         self.angulo_anterior = 0
-        self.velocidades_anteriorres = [0, 0, 0] # Faulhaber 0, 1 y 2
+        self.velocidades_anteriores = np.array([0, 0, 0]) # Faulhaber 0, 1 y 2
     
 
     def enviar_angulo(self, angulo, espera=0.3):
@@ -48,26 +49,27 @@ class Comunicador:
             faulhaber.write(msgEncode)
 
     
-    def enviar_velocidad(self, velocidades, espera=0.3):
+    def enviar_velocidad(self, velocidades, n_iteraciones=10):
         if velocidades != None:
-            time.sleep(espera)
             msgVel0, msgVel1, msgVel2 = "No actualizado", "No actualizado", "No actualizado"
             if len(velocidades) == 1:
                 velocidades = [velocidades[0], velocidades[0], velocidades[0]]
-            if abs(velocidades[0] - self.velocidades_anteriorres[0]) > 50:
-                msgVel0 = f"v{round(velocidades[0])}\n"
+            velocidades = np.array(velocidades)
+            delta = (velocidades - self.velocidades_anteriores) // n_iteraciones
+            for i in range(n_iteraciones):
+                time.sleep(round(1/n_iteraciones, 1))
+                self.velocidades_anteriores += delta
+
+                msgVel0 = f"v{round(self.velocidades_anteriores[0])}\n"
                 msgEncode = str.encode(msgVel0)
                 self.faulhabers[0].write(msgEncode)
-                self.velocidades_anteriorres[0] = velocidades[0]
-            if abs(velocidades[1] - self.velocidades_anteriorres[1]) > 50:
-                msgVel1 = f"v{round(velocidades[1])}\n"
+
+                msgVel1 = f"v{round(self.velocidades_anteriores[1])}\n"
                 msgEncode = str.encode(msgVel1)
                 self.faulhabers[1].write(msgEncode)
-                self.velocidades_anteriorres[1] = velocidades[1]
-            if abs(velocidades[2] - self.velocidades_anteriorres[2]) > 50:
-                msgVel2 = f"v{-round(velocidades[2])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
+
+                msgVel2 = f"v{-round(self.velocidades_anteriores[2])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
                 msgEncode = str.encode(msgVel2)
                 self.faulhabers[2].write(msgEncode)
-                self.velocidades_anteriorres[2] = velocidades[2]
 
-            print(f"Enviado {msgVel0, msgVel1, msgVel2}")
+                print(f"Enviado {msgVel0, msgVel1, msgVel2}")

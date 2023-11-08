@@ -43,7 +43,7 @@ class Control:
             try:
                 velocidades = velocidades.replace(" ", "").split(",")
                 velocidades = [max(-max_speed, min(int(velocidad), max_speed)) for velocidad in velocidades]
-                self.comunicador.enviar_velocidad(velocidades, espera=0)
+                self.comunicador.enviar_velocidad(velocidades)
             except ValueError:
                 print("Error: valores incorrectos para las velocidades")
 
