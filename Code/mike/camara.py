@@ -1,20 +1,26 @@
 import cv2
 import numpy as np
 import keyboard
+from detector import DetectorColor, DetectorMovimiento
 
 
 ANCHO_CANCHA = 1.525
 
 class Camara:
-    def __init__(self, numero_camara=None, rango=np.array([5, 20, 30]), distancia=2.74):
-        self.rango = rango
-        self.color = None
+    def __init__(self, numero_camara=None, rango=np.array([5, 20, 30]), distancia=2.74,
+                 movimiento=False):
         self.coordenadas = None
         self.ultimas_coordenadas = None
         self.original = None
+        self.movimiento = movimiento
 
         self.limites = [] # [izquierdo, derecho]
         self.distancia = distancia
+
+        if movimiento:
+            self.detector_objetivo = DetectorMovimiento()
+        else:
+            self.detector_objetivo = DetectorColor(rango)
 
         if numero_camara is None:
             numero_camara = self.detectar_camara_externa()
@@ -34,81 +40,30 @@ class Camara:
         return 1
 
 
-    def mouseRGB(self, event, x, y, flags, param):
-        if event == cv2.EVENT_LBUTTONDOWN:
-            colorsB = self.original[y, x, 0]
-            colorsG = self.original[y, x, 1]
-            colorsR = self.original[y, x, 2]
-            colors = self.original[y, x]
-            hsv_value = np.uint8([[[colorsB, colorsG, colorsR]]])
-            hsv = cv2.cvtColor(hsv_value, cv2.COLOR_BGR2HSV)
-
-            if len(self.limites) < 2:
-                self.limites.append(x)
-            else:
-                self.lower_color = hsv - self.rango
-                self.upper_color = hsv + self.rango
-
-                self.color = hsv
-
-
     def iniciar(self):
         cv2.namedWindow('original')
-        cv2.setMouseCallback('original', self.mouseRGB)
+        cv2.setMouseCallback('original', self.detector_objetivo.mouseClick)
 
         self.grabar_video()
-
-
-    def _anotaciones(self, mask):
-        M = cv2.moments(mask)
-
-        if M["m00"] != 0:
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            self.ultimas_coordenadas = np.array([cX, cY])
-        else:
-            cX, cY = self.ultimas_coordenadas
-
-        cv2.circle(self.imagen_filtrada, (cX, cY), 5, (255, 255, 255), -1)
-        cv2.putText(self.imagen_filtrada, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-
-        if len(self.limites) == 2:
-            izquierdo = self.limites[0]
-            derecho = self.limites[1]
-
-            cv2.line(self.imagen_filtrada, np.array([izquierdo, 0]),
-                     np.array([izquierdo, len(self.original)]), (255, 255, 255), 3)
-            cv2.line(self.imagen_filtrada, np.array([derecho, 0]),
-                     np.array([derecho, len(self.original)]), (255, 255, 255), 3)
-
-        self.coordenadas = np.array([cX, cY])
 
     
     def grabar_video(self):
         while True:
             ret, self.original = self.video.read()
-
-            hsv_img = cv2.cvtColor(self.original, cv2.COLOR_BGR2HSV)
+            self.detector_objetivo.original = self.original
 
             if keyboard.is_pressed('q'): # Romper el loop cuando se aprieta 'q'
                 break
 
-            if self.color is None:
-                cv2.waitKey(1)
-                cv2.imshow('original', self.original)
-                continue
-
-            mask = cv2.inRange(hsv_img, self.lower_color, self.upper_color)
-
-            cv2.imshow('original', self.original)
-
-            self.imagen_filtrada = cv2.bitwise_and(self.original, self.original, mask=mask)
-
-            self._anotaciones(mask)
-
             cv2.waitKey(1)
-
             cv2.imshow('original', self.original)
+
+            if not self.movimiento:
+                if self.detector_objetivo.color is None:
+                    continue            
+
+            self.imagen_filtrada, self.limites = self.detector_objetivo.filtrar()
+
             cv2.imshow('filtrada', self.imagen_filtrada)
         
         self.video.release()
