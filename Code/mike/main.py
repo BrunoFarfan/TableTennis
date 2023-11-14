@@ -7,8 +7,11 @@ from comm import Comunicador
 class Control:
     def __init__(self):
         self.loop = True # variable para controlar loops secundarios de threads
-        self.video = Camara(numero_camara=1, rango=np.array([5, 50, 50]), distancia=1.75)
-        self.comunicador = Comunicador()
+        self.video = Camara(rango=np.array([5, 50, 50]), distancia=1.75)
+        self.comunicador = Comunicador(puerto_arduino="/dev/cu.usbmodem14101",
+                                       puerto_faulhaber0="/dev/cu.usbserial-1A1210",
+                                       puerto_faulhaber1="/dev/cu.usbserial-1A1220",
+                                       puerto_faulhaber2="/dev/cu.usbserial-1A1230")
         self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
         self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
@@ -37,13 +40,34 @@ class Control:
         if single:
             self.comunicador.enviar_angulo(angulo)
 
+    
+    def spin2velocidad(self, x, y, h=False):
+        x, y = float(x), float(y)
+        if h:
+            R1 = x
+            R2 = (3 * x + np.sqrt(3) * x  * y)/3
+            R3 = (3 * x - np.sqrt(3) * x  * y)/3
+        else:
+            R1 = (3 * x + 2 * x * y)/3
+            R2 = (3 * x - x * y)/3
+            R3 = (3 * x - x * y)/3
+        return [round(R1), round(R2), round(R3)]
+
 
     def enviar_velocidad(self, max_speed=30000): # Función temporal para mandar velocidades manualmente
         while self.loop:
-            velocidades = input("Velocidades: ")
+            spin_input = input("Velocidades (x,yh): ")
             try:
-                velocidades = velocidades.replace(" ", "").split(",")
-                velocidades = [max(-max_speed, min(int(velocidad), max_speed)) for velocidad in velocidades]
+                spin_input = spin_input.replace(" ", "").lower().split(",")
+                spin_input = spin_input
+
+                if len(spin_input) > 1:
+                    x, y, h = spin_input[0], spin_input[1].replace("h", ""), "h" in spin_input[1]
+                else:
+                    x, y, h = spin_input[0], 0, False
+
+                velocidades = self.spin2velocidad(x, y, h)
+                velocidades = [max(-max_speed, min(velocidad, max_speed)) for velocidad in velocidades]
                 self.comunicador.enviar_velocidad(velocidades)
             except ValueError:
                 print("Error: valores incorrectos para las velocidades")

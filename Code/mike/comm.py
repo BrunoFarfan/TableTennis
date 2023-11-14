@@ -1,12 +1,15 @@
 import time
 import serial
 import numpy as np
+import threading as th
 
 
 class Comunicador:
     def __init__(self, puerto_arduino="COM17", puerto_faulhaber0="COM21",
                  puerto_faulhaber1="COM22", puerto_faulhaber2="COM23",
                  baudrate_arduino=115200, baudrate_faulhabers=9600, timeout=3):
+
+        self.write_lock = th.Lock()
         
         self.arduino = serial.Serial(port=puerto_arduino, baudrate=baudrate_arduino, timeout=timeout)
         self.faulhabers = [
@@ -21,55 +24,59 @@ class Comunicador:
         self.velocidades_anteriores = np.array([0, 0, 0]) # Faulhaber 0, 1 y 2
     
 
-    def enviar_angulo(self, angulo, espera=0.3):
+    def enviar_angulo(self, angulo, espera=0):
         if angulo != None:
-            time.sleep(espera)
-            msgOn = f"{round(angulo)}\n"
-            if abs(angulo - self.angulo_anterior) > 1:
-                msgEncode = str.encode(msgOn)
-                self.arduino.write(msgEncode)
+            with self.write_lock:
+                time.sleep(espera)
+                msgOn = f"{round(angulo)}\n"
+                if abs(angulo - self.angulo_anterior) > 1:
+                    msgEncode = str.encode(msgOn)
+                    self.arduino.write(msgEncode)
 
-                self.angulo_anterior = angulo
+                    self.angulo_anterior = angulo
 
 
     def start_faulhabers(self):
-        msgOn = "en\n"
-        for faulhaber in self.faulhabers:
-            msgEncode = str.encode(msgOn)
-            faulhaber.write(msgEncode)
+        with self.write_lock:
+            msgOn = "en\n"
+            for faulhaber in self.faulhabers:
+                msgEncode = str.encode(msgOn)
+                faulhaber.write(msgEncode)
 
     
     def stop_faulhabers(self):
-        msgVel = "v0\n"
-        msgOff = "di\n"
-        for faulhaber in self.faulhabers:
-            msgEncode = str.encode(msgVel)
-            faulhaber.write(msgEncode)
-            msgEncode = str.encode(msgOff)
-            faulhaber.write(msgEncode)
+        with self.write_lock:
+            msgVel = "v0\n"
+            msgOff = "di\n"
+            for faulhaber in self.faulhabers:
+                msgEncode = str.encode(msgVel)
+                faulhaber.write(msgEncode)
+                msgEncode = str.encode(msgOff)
+                faulhaber.write(msgEncode)
 
     
-    def enviar_velocidad(self, velocidades, n_iteraciones=20):
+    def enviar_velocidad(self, velocidades, n_iteraciones=20, t_aceleracion=1.5):
         if velocidades != None:
-            msgVel0, msgVel1, msgVel2 = "No actualizado", "No actualizado", "No actualizado"
-            if len(velocidades) == 1:
-                velocidades = [velocidades[0], velocidades[0], velocidades[0]]
-            velocidades = np.array(velocidades)
-            delta = (velocidades - self.velocidades_anteriores) // n_iteraciones
-            for _ in range(n_iteraciones):
-                time.sleep(round(1/n_iteraciones, 2))
-                self.velocidades_anteriores += delta
+            with self.write_lock:
+                msgVel0, msgVel1, msgVel2 = "No actualizado", "No actualizado", "No actualizado"
+                if len(velocidades) == 1:
+                    velocidades = [velocidades[0], velocidades[0], velocidades[0]]
+                velocidades = np.array(velocidades)
+                delta = (velocidades - self.velocidades_anteriores) // n_iteraciones
+                for _ in range(n_iteraciones):
+                    time.sleep(round(t_aceleracion/n_iteraciones, 2))
+                    self.velocidades_anteriores += delta
 
-                msgVel0 = f"v{round(self.velocidades_anteriores[0])}\n"
-                msgEncode = str.encode(msgVel0)
-                self.faulhabers[0].write(msgEncode)
+                    msgVel0 = f"v{round(self.velocidades_anteriores[0])}\n"
+                    msgEncode = str.encode(msgVel0)
+                    self.faulhabers[0].write(msgEncode)
 
-                msgVel1 = f"v{round(self.velocidades_anteriores[1])}\n"
-                msgEncode = str.encode(msgVel1)
-                self.faulhabers[1].write(msgEncode)
+                    msgVel1 = f"v{round(self.velocidades_anteriores[1])}\n"
+                    msgEncode = str.encode(msgVel1)
+                    self.faulhabers[1].write(msgEncode)
 
-                msgVel2 = f"v{-round(self.velocidades_anteriores[2])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
-                msgEncode = str.encode(msgVel2)
-                self.faulhabers[2].write(msgEncode)
+                    msgVel2 = f"v{-round(self.velocidades_anteriores[2])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
+                    msgEncode = str.encode(msgVel2)
+                    self.faulhabers[2].write(msgEncode)
 
-                print(f"Enviado {msgVel0, msgVel1, msgVel2}")
+                    print(f"Enviado {msgVel0, msgVel1, msgVel2}")

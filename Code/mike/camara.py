@@ -6,7 +6,7 @@ import keyboard
 ANCHO_CANCHA = 1.525
 
 class Camara:
-    def __init__(self, numero_camara, rango=np.array([5, 20, 30]), distancia=2.74):
+    def __init__(self, numero_camara=None, rango=np.array([5, 20, 30]), distancia=2.74):
         self.rango = rango
         self.color = None
         self.coordenadas = None
@@ -16,7 +16,22 @@ class Camara:
         self.limites = [] # [izquierdo, derecho]
         self.distancia = distancia
 
+        if numero_camara is None:
+            numero_camara = self.detectar_camara_externa()
         self.video = cv2.VideoCapture(numero_camara)
+
+    
+    def detectar_camara_externa(self): # Asume que solo hay 2 cámaras conectadas
+        cap = cv2.VideoCapture(0)
+        ancho = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        alto = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        fps = cap.get(cv2.CAP_PROP_FPS)
+
+        if fps == 25 and alto == 960 and ancho == 1280: # Parámetros C270
+            cap.release()
+            return 0
+        cap.release()
+        return 1
 
 
     def mouseRGB(self, event, x, y, flags, param):
@@ -75,6 +90,9 @@ class Camara:
 
             hsv_img = cv2.cvtColor(self.original, cv2.COLOR_BGR2HSV)
 
+            if keyboard.is_pressed('q'): # Romper el loop cuando se aprieta 'q'
+                break
+
             if self.color is None:
                 cv2.waitKey(1)
                 cv2.imshow('original', self.original)
@@ -92,9 +110,6 @@ class Camara:
 
             cv2.imshow('original', self.original)
             cv2.imshow('filtrada', self.imagen_filtrada)
-
-            if keyboard.is_pressed('q'): # Romper el loop cuando se aprieta 'q'
-                break
         
         self.video.release()
         cv2.destroyAllWindows()
