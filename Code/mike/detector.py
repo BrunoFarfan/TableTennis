@@ -34,12 +34,11 @@ class DetectorColor:
         if M["m00"] != 0:
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
-            self.ultimas_coordenadas = np.array([cX, cY])
-        else:
-            cX, cY = self.ultimas_coordenadas
+            self.coordenadas = np.array([cX, cY])
 
-        cv2.circle(self.imagen_filtrada, (cX, cY), 5, (255, 255, 255), -1)
-        cv2.putText(self.imagen_filtrada, "centroid", (cX - 25, cY - 25),
+        cv2.circle(self.imagen_filtrada, self.coordenadas, 5, (255, 255, 255), -1)
+        cv2.putText(self.imagen_filtrada, "centroid", (self.coordenadas[0] - 25,
+                                                       self.coordenadas[1] - 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
         if len(self.limites) == 2:
@@ -51,8 +50,6 @@ class DetectorColor:
             cv2.line(self.imagen_filtrada, np.array([derecho, 0]),
                      np.array([derecho, len(self.original)]), (255, 255, 255), 3)
 
-        self.coordenadas = np.array([cX, cY])
-
     
     def filtrar(self):
         hsv_img = cv2.cvtColor(self.original, cv2.COLOR_BGR2HSV)
@@ -63,7 +60,7 @@ class DetectorColor:
 
         self._anotaciones(mask)
 
-        return (self.imagen_filtrada, self.limites, self.coordenadas, self.ultimas_coordenadas)
+        return (self.imagen_filtrada, self.limites, self.coordenadas)
     
 
 
@@ -94,12 +91,11 @@ class DetectorMovimiento:
         if M["m00"] != 0:
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
-            self.ultimas_coordenadas = np.array([cX, cY])
-        else:
-            cX, cY = self.ultimas_coordenadas
+            self.coordenadas = np.array([cX, cY])
 
-        cv2.circle(self.imagen_filtrada, (cX, cY), 5, (255, 255, 255), -1)
-        cv2.putText(self.imagen_filtrada, "centroid", (cX - 25, cY - 25),
+        cv2.circle(self.imagen_filtrada, self.coordenadas, 5, (255, 255, 255), -1)
+        cv2.putText(self.imagen_filtrada, "centroid", (self.coordenadas[0] - 25,
+                                                       self.coordenadas[1] - 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
         if len(self.limites) == 2:
@@ -110,8 +106,6 @@ class DetectorMovimiento:
                      np.array([izquierdo, len(self.original)]), (255, 255, 255), 3)
             cv2.line(self.imagen_filtrada, np.array([derecho, 0]),
                      np.array([derecho, len(self.original)]), (255, 255, 255), 3)
-
-        self.coordenadas = np.array([cX, cY])
 
 
     def update_background(self, step):
@@ -145,4 +139,4 @@ class DetectorMovimiento:
 
         self._anotaciones(self.imagen_filtrada)
 
-        return (self.imagen_filtrada, self.limites, self.coordenadas, self.ultimas_coordenadas)
+        return (self.imagen_filtrada, self.limites, self.coordenadas)

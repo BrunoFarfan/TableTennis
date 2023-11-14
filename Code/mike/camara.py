@@ -10,7 +10,6 @@ class Camara:
     def __init__(self, numero_camara=None, rango=np.array([5, 20, 30]), distancia=2.74,
                  movimiento=False):
         self.coordenadas = None
-        self.ultimas_coordenadas = None
         self.original = None
         self.movimiento = movimiento
 
@@ -62,7 +61,7 @@ class Camara:
                 if self.detector_objetivo.color is None:
                     continue            
 
-            self.imagen_filtrada, self.limites,self.coordenadas, self.ultimas_coordenadas = self.detector_objetivo.filtrar()
+            self.imagen_filtrada, self.limites,self.coordenadas = self.detector_objetivo.filtrar()
 
             cv2.imshow('filtrada', self.imagen_filtrada)
         
