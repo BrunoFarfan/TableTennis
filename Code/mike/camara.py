@@ -61,7 +61,7 @@ class Camara:
                 if self.detector_objetivo.color is None:
                     continue            
 
-            self.imagen_filtrada, self.limites,self.coordenadas = self.detector_objetivo.filtrar()
+            self.imagen_filtrada, self.limites, self.coordenadas = self.detector_objetivo.filtrar()
 
             cv2.imshow('filtrada', self.imagen_filtrada)
         
