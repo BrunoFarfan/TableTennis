@@ -62,7 +62,7 @@ class Camara:
                 if self.detector_objetivo.color is None:
                     continue            
 
-            self.imagen_filtrada, self.limites = self.detector_objetivo.filtrar()
+            self.imagen_filtrada, self.limites,self.coordenadas, self.ultimas_coordenadas = self.detector_objetivo.filtrar()
 
             cv2.imshow('filtrada', self.imagen_filtrada)
         
@@ -72,8 +72,12 @@ class Camara:
 
     def generar_angulo(self, angulo_limite=45):
         if self.original is not None and self.coordenadas is not None:
-            x = self.coordenadas[0] - self.limites[0]
-            x = (x / (self.limites[1] - self.limites[0])) - 0.5 # Posición relativa al centro (-0.5 hasta 0.5)
+            if len(self.limites) < 2:
+                limites = [0, len(self.original[0])]
+            else:
+                limites = self.limites
+            x = self.coordenadas[0] - limites[0]
+            x = (x / (limites[1] - limites[0])) - 0.5 # Posición relativa al centro (-0.5 hasta 0.5)
             pos_horizontal = x * ANCHO_CANCHA
             angulo = np.arctan(pos_horizontal/self.distancia)
             angulo = np.rad2deg(angulo)

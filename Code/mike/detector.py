@@ -11,7 +11,7 @@ class DetectorColor:
 
 
     def mouseClick(self, event, x, y, flags, param):
-        if event == cv2.EVENT_LBUTTONDOWN:
+        if event == cv2.EVENT_RBUTTONDOWN:
             colorsB = self.original[y, x, 0]
             colorsG = self.original[y, x, 1]
             colorsR = self.original[y, x, 2]
@@ -19,13 +19,13 @@ class DetectorColor:
             hsv_value = np.uint8([[[colorsB, colorsG, colorsR]]])
             hsv = cv2.cvtColor(hsv_value, cv2.COLOR_BGR2HSV)
 
-            if len(self.limites) < 2:
-                self.limites.append(x)
-            else:
-                self.lower_color = hsv - self.rango
-                self.upper_color = hsv + self.rango
+            self.lower_color = hsv - self.rango
+            self.upper_color = hsv + self.rango
 
-                self.color = hsv
+            self.color = hsv
+        
+        elif event == cv2.EVENT_LBUTTONDOWN and len(self.limites) < 2:
+            self.limites.append(x)
 
     
     def _anotaciones(self, mask):
@@ -63,7 +63,7 @@ class DetectorColor:
 
         self._anotaciones(mask)
 
-        return (self.imagen_filtrada, self.limites)
+        return (self.imagen_filtrada, self.limites, self.coordenadas, self.ultimas_coordenadas)
     
 
 
@@ -145,4 +145,4 @@ class DetectorMovimiento:
 
         self._anotaciones(self.imagen_filtrada)
 
-        return (self.imagen_filtrada, self.limites)
+        return (self.imagen_filtrada, self.limites, self.coordenadas, self.ultimas_coordenadas)
