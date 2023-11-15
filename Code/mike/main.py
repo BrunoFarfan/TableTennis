@@ -44,14 +44,14 @@ class Control:
     def spin2velocidad(self, x, y, h=False):
         x, y = float(x), float(y)
         if h:
-            R1 = x
-            R2 = (3 * x + np.sqrt(3) * x  * y)/3
-            R3 = (3 * x - np.sqrt(3) * x  * y)/3
+            r1 = x
+            r2 = (3 * x + np.sqrt(3) * x  * y)/3
+            r3 = (3 * x - np.sqrt(3) * x  * y)/3
         else:
-            R1 = (3 * x + 2 * x * y)/3
-            R2 = (3 * x - x * y)/3
-            R3 = (3 * x - x * y)/3
-        return [round(R1), round(R2), round(R3)]
+            r1 = (3 * x + 2 * x * y)/3
+            r2 = (3 * x - x * y)/3
+            r3 = (3 * x - x * y)/3
+        return [round(r1), round(r2), round(r3)]
 
 
     def enviar_velocidad(self, max_speed=30000): # Función temporal para mandar velocidades manualmente
@@ -67,7 +67,7 @@ class Control:
                     x, y, h = spin_input[0], 0, False
 
                 velocidades = self.spin2velocidad(x, y, h)
-                velocidades = [max(-max_speed, min(velocidad, max_speed)) for velocidad in velocidades]
+                velocidades = [max(0, min(velocidad, max_speed)) for velocidad in velocidades] # Limitar velocidades al intervalo [0, max_speed]
                 self.comunicador.enviar_velocidad(velocidades)
             except ValueError:
                 print("Error: valores incorrectos para las velocidades")
