@@ -155,9 +155,9 @@ void loop() {
     // Voltaje aplicado a motores (modificar aquí para implementar control)
     
     Serial.print("Angulo ref: ") ;Serial.print(angulo_ref); Serial.print(" / "); Serial.print(pinInput);
-    Serial.print(" / "); Serial.print(cuentas_ref);Serial.print(" / Cuentas_actuales: "); Serial.print(cuentas_actuales);
-    Serial.print(" Kp*Error_act: "); Serial.print(Kp * error_actual);
-    Serial.print(" Ki*Error_acum: "); Serial.println(Ki * error_acumulado);
+    Serial.print(" / "); Serial.print(cuentas_ref);Serial.print(", Cuentas_actuales: "); Serial.print(cuentas_actuales);
+    Serial.print(", kp: "); Serial.print(Kp); Serial.print(", Error_act: "); Serial.print(error_actual);
+    Serial.print(", Ki*Error_acum: "); Serial.println(Ki * error_acumulado);
 
     // Motor Voltage
     

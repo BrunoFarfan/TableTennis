@@ -12,12 +12,15 @@ class Control:
                                        puerto_faulhaber0="/dev/cu.usbserial-1A1210",
                                        puerto_faulhaber1="/dev/cu.usbserial-1A1220",
                                        puerto_faulhaber2="/dev/cu.usbserial-1A1230")
+        
         self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
+        self.shot_handler = th.Thread(target=self.disparo_automatico, daemon=True)
         self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
 
     def start(self):
         self.angle_handler.start()
+        self.shot_handler.start()
         self.speed_handler.start()
         self.video.iniciar()
 
@@ -39,6 +42,18 @@ class Control:
         # Enviar un solo mensaje
         if single:
             self.comunicador.enviar_angulo(angulo)
+
+    
+    # 21 porque creo que eso corresponde a 1 grado en el ángulo del pololu
+    def disparo_automatico(self, tolerancia=21):
+        while self.loop:
+            error_angulo = self.comunicador.leer_error_angulo()
+            if error_angulo != None:
+                continue
+            print(f"Angulo actual: {error_angulo}")
+            if error_angulo <= tolerancia:
+                print("Disparo!")
+                self.comunicador.disparar()
 
     
     def spin2velocidad(self, x, y, h=False):
