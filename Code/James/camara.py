@@ -1,155 +1,89 @@
 import cv2
 import numpy as np
-import time
+import keyboard
+from detector import DetectorColor, DetectorMovimiento, DetectorCaras
 
+
+ANCHO_CANCHA = 1.525
 
 class Camara:
-    def __init__(self, numero_camara, rango=np.array([0, 0, 30])):
-        self.rango = rango
-        self.color = None
-        self.lower_color = None
-        self.upper_color = None
+    def __init__(self, numero_camara=None, rango=np.array([5, 20, 30]), distancia=2.74,
+                 modo= 0, rango_cara= (30, 70)):
+        # Modos: 0 -> Color, 1 -> Movimiento, 2 -> Caras
         self.coordenadas = None
-        self.ultimas_coordenadas = None
-
-        self.time = 0
-        self.count = 0
-        self.max_count = 5
-        self.thresh = 15
-        self.kernel = np.ones((5,5), np.uint8)
-
         self.original = None
-        self.img_out = None
-        self.move_mask = None
-        self.temp_background = None
-        self.background = [None]*self.max_count
+        self.modo = modo
 
+        self.limites = [] # [izquierdo, derecho]
+        self.distancia = distancia
+
+        if modo == 0:
+            self.detector_objetivo = DetectorColor(rango)
+        elif modo == 1:
+            self.detector_objetivo = DetectorMovimiento()
+        elif modo == 2:
+            self.detector_objetivo = DetectorCaras(rango_cara, d_angle= 60)
+        else:
+            self.detector_objetivo = DetectorColor(rango)
+
+        if numero_camara is None:
+            numero_camara = self.detectar_camara_externa()
         self.video = cv2.VideoCapture(numero_camara)
 
+    
+    def detectar_camara_externa(self): # Asume que solo hay 2 cámaras conectadas
+        cap = cv2.VideoCapture(0)
+        ancho = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        alto = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        fps = cap.get(cv2.CAP_PROP_FPS)
 
-    def mouseRGB(self, event, x, y, flags, param):
-        if event == cv2.EVENT_LBUTTONDOWN:
-            colorsB = self.original[y, x, 0]
-            colorsG = self.original[y, x, 1]
-            colorsR = self.original[y, x, 2]
-            colors = self.original[y, x]
-            hsv_value = np.uint8([[[colorsB, colorsG, colorsR]]])
-            hsv = cv2.cvtColor(hsv_value, cv2.COLOR_BGR2HSV)
-
-            self.lower_color = hsv - self.rango
-            self.upper_color = hsv + self.rango
-
-            self.color = hsv
+        if fps == 25 and alto == 960 and ancho == 1280: # Parámetros C270
+            cap.release()
+            return 0
+        cap.release()
+        return 1
 
 
     def iniciar(self):
         cv2.namedWindow('original')
-        cv2.setMouseCallback('original', self.mouseRGB)
+        cv2.setMouseCallback('original', self.detector_objetivo.mouseClick)
 
-        self.time = time.time()
         self.grabar_video()
 
-
-    def _anotaciones(self, mask):
-        M = cv2.moments(mask)
-
-        if M["m00"] != 0:
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            self.ultimas_coordenadas = np.array([cX, cY])
-        else:
-            cX, cY = self.ultimas_coordenadas
-
-        cv2.circle(self.img_out, (cX, cY), 5, (255, 255, 255), -1)
-        cv2.putText(self.img_out, "centroid", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-
-        self.coordenadas = np.array([cX, cY])
-
-    def update_background(self, step):
-        if step == 1:
-            return cv2.absdiff(self.background[step], self.background[0])
-        return cv2.absdiff(cv2.absdiff(self.background[step], self.background[0]), self.update_background(step= step-1))
     
-    # def update_background(self, step):
-    #     for frame in self.background[:-2]:
-    #         diff = cv2.absdiff(diff, cv2.absdiff(frame, self.background[-1]))
-    #     if step == 0:
-    #         return self.background[0]
-    #     return cv2.absdiff(self.background[step], self.update_background(step= step-1))
-
     def grabar_video(self):
         while True:
             ret, self.original = self.video.read()
-            hsv_img = cv2.cvtColor(self.original, cv2.COLOR_BGR2HSV)
-            
-            if self.count < self.max_count:
-                self.img_out = np.ones(hsv_img.shape[:2])
-                self.move_mask = self.original
-                self.temp_background = self.original
-                self.background.pop(0)
-                self.background.append(hsv_img)
-                self.count += 1
-            else:
-                self.background.pop(0)
-                self.background.append(hsv_img)
-                self.temp_background = self.update_background(step = self.max_count-1)
-                self.move_mask = cv2.cvtColor(cv2.cvtColor(self.temp_background, cv2.COLOR_HSV2BGR), cv2.COLOR_BGR2GRAY)
-                ret, self.move_mask = cv2.threshold(self.move_mask, self.thresh, 255, cv2.THRESH_BINARY)
-                self.move_mask = cv2.morphologyEx(self.move_mask, cv2.MORPH_OPEN, self.kernel)
-                self.move_mask = cv2.dilate(self.move_mask, self.kernel, iterations= 5)
-                # flood_mask = np.zeros((self.move_mask.shape[0]+2, self.move_mask.shape[1]+2), np.uint8)
-                # cv2.floodFill(self.move_mask, flood_mask, (0,0), 255)
-                # self.move_mask = cv2.erode(self.move_mask, self.kernel, iterations= 25)
-                self.img_out = self.move_mask
-                # self.img_out = cv2.morphologyEx(self.move_mask, cv2.MORPH_OPEN, self.kernel)
-                # self.img_out = np.zeros((self.original.shape[0], self.original.shape[1], 3))
-                # self.img_out[:,:,0] = self.move_mask
-                # self.img_out[:,:,1] = self.move_mask
-                # self.img_out[:,:,2] = self.move_mask
+            self.detector_objetivo.original = self.original
 
-                # # temp_h = self.temp_background[:,:,0]
-                # temp_s = self.temp_background[:,:,1]
-                # temp_v = self.temp_background[:,:,2]
-                # # ret, thresh_h = cv2.threshold(temp_h, self.rango[0], 255, cv2.THRESH_BINARY)
-                # ret, thresh_s = cv2.threshold(temp_s, self.rango[1], 255, cv2.THRESH_BINARY)
-                # ret, thresh_v = cv2.threshold(temp_v, self.rango[2], 255, cv2.THRESH_BINARY)
-                # self.temp_background[:,:,0] = np.ones((self.temp_background.shape[:2]))
-                # self.temp_background[:,:,1] = np.ones((self.temp_background.shape[:2]))*255
-                # self.temp_background[:,:,2] = thresh_v
-                # # self.move_mask = self.temp_background # cv2.cvtColor(self.temp_background, cv2.COLOR_HSV2BGR)
-
-            # if self.color is None:
-            #     cv2.waitKey(1)
-            #     cv2.imshow('original', self.original)
-            #     continue
-            
-            if not (self.color is None):
-                mask = cv2.inRange(hsv_img, self.lower_color, self.upper_color)
-                self.img_out = cv2.bitwise_and(self.img_out, self.img_out, mask= mask)
-                
-            # # cv2.imshow('original', self.img_out)
-
-            # self.imagen_filtrada = cv2.bitwise_and(self.img_out, self.img_out, mask=mask)
-
-            self._anotaciones(self.img_out)
+            if keyboard.is_pressed('q'): # Romper el loop cuando se aprieta 'q'
+                break
 
             cv2.waitKey(1)
-
             cv2.imshow('original', self.original)
-            cv2.imshow('filtrada', self.img_out)
 
-            # Prints de info:
+            if not self.movimiento:
+                if self.detector_objetivo.color is None:
+                    continue            
 
-            # if self.original is not None and self.coordenadas is not None:
-            #     ancho = len(self.original[0])
-            #     alto = len(self.original)
-            #     x = self.coordenadas[0]
-            #     y = self.coordenadas[1]
-            #     print(f"Coordenadas (x, y) absolutas y en porcentaje: {x, y}, "
-            #         f"{round(x/ancho * 100, 1), round(y/alto * 100, 1)}%")
+            self.imagen_filtrada, self.limites, self.coordenadas = self.detector_objetivo.filtrar()
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            cv2.imshow('filtrada', self.imagen_filtrada)
         
         self.video.release()
         cv2.destroyAllWindows()
+
+
+    def generar_angulo(self, angulo_limite=45):
+        if self.original is not None and self.coordenadas is not None:
+            if len(self.limites) < 2:
+                limites = [0, len(self.original[0])]
+            else:
+                limites = self.limites
+            x = self.coordenadas[0] - limites[0]
+            x = (x / (limites[1] - limites[0])) - 0.5 # Posición relativa al centro (-0.5 hasta 0.5)
+            pos_horizontal = x * ANCHO_CANCHA
+            angulo = np.arctan(pos_horizontal/self.distancia)
+            angulo = np.rad2deg(angulo)
+            angulo = min(angulo_limite, max(-angulo_limite, angulo))
+            return angulo
