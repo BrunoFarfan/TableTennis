@@ -1,34 +1,33 @@
 import cv2
 import numpy as np
 import keyboard
-from detector import DetectorColor, DetectorMovimiento, DetectorCaras
+from time import sleep
+from detector import DetectorMaestro
 
 
 ANCHO_CANCHA = 1.525
 
 class Camara:
-    def __init__(self, numero_camara=None, rango=np.array([5, 20, 30]), distancia=2.74,
-                 modo= 0, rango_cara= (30, 70)):
-        # Modos: 0 -> Color, 1 -> Movimiento, 2 -> Caras
+    def __init__(self, numero_camara= None, distancia= 2.74, modo= 0, rango_color= np.array([5, 20, 30]), rango_cara= (30, 70)):
+        
         self.coordenadas = None
         self.original = None
-        self.modo = modo
+        self.filtrada = None
 
         self.limites = [] # [izquierdo, derecho]
         self.distancia = distancia
 
-        if modo == 0:
-            self.detector_objetivo = DetectorColor(rango)
-        elif modo == 1:
-            self.detector_objetivo = DetectorMovimiento()
-        elif modo == 2:
-            self.detector_objetivo = DetectorCaras(rango_cara, d_angle= 60)
-        else:
-            self.detector_objetivo = DetectorColor(rango)
+        self.modo = modo
+        self.detector_objetivo = DetectorMaestro(modo= modo,
+                                                rango_color= rango_color,
+                                                max_layers= 5, thresh= 15, kernel= np.ones((5,5), np.uint8),
+                                                rango_cara= rango_cara, d_angle= 60, angle_tolerance= 5)
 
         if numero_camara is None:
             numero_camara = self.detectar_camara_externa()
         self.video = cv2.VideoCapture(numero_camara)
+
+        self.active = False
 
     
     def detectar_camara_externa(self): # Asume que solo hay 2 cámaras conectadas
@@ -52,23 +51,28 @@ class Camara:
 
     
     def grabar_video(self):
-        while True:
+        self.active = True
+        while self.active:
             ret, self.original = self.video.read()
             self.detector_objetivo.original = self.original
 
             if keyboard.is_pressed('q'): # Romper el loop cuando se aprieta 'q'
-                break
-
+                self.active = False
+            if keyboard.is_pressed('m'): # Cambiar de filtro
+                cv2.destroyWindow(f'filtrada {self.modo}')
+                if self.modo == 3:
+                    self.modo = 0
+                else:
+                    self.modo += 1
+                self.detector_objetivo.modo = self.modo
+                sleep(0.1)
+                
             cv2.waitKey(1)
             cv2.imshow('original', self.original)
 
-            if not self.movimiento:
-                if self.detector_objetivo.color is None:
-                    continue            
+            self.filtrada, self.limites, self.coordenadas = self.detector_objetivo.filtrar()
 
-            self.imagen_filtrada, self.limites, self.coordenadas = self.detector_objetivo.filtrar()
-
-            cv2.imshow('filtrada', self.imagen_filtrada)
+            cv2.imshow(f'filtrada {self.modo}', self.filtrada)
         
         self.video.release()
         cv2.destroyAllWindows()
