@@ -8,20 +8,20 @@ class Control:
     def __init__(self):
         self.loop = True # variable para controlar loops secundarios de threads
         self.video = Camara(distancia=1.75, modo= 0, rango_color= np.array([5, 50, 50]), rango_cara= (30, 70), numero_camara= 0)
-        # self.comunicador = Comunicador(puerto_arduino="/dev/cu.usbmodem14101",
-        #                                puerto_faulhaber0="/dev/cu.usbserial-1A1210",
-        #                                puerto_faulhaber1="/dev/cu.usbserial-1A1220",
-        #                                puerto_faulhaber2="/dev/cu.usbserial-1A1230")
-        # self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
-        # self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
+        self.comunicador = Comunicador(puerto_arduino="/dev/cu.usbmodem14101",
+                                       puerto_faulhaber0="/dev/cu.usbserial-1A1210",
+                                       puerto_faulhaber1="/dev/cu.usbserial-1A1220",
+                                       puerto_faulhaber2="/dev/cu.usbserial-1A1230")
+        self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
+        self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
 
     def start(self):
-        # self.angle_handler.start()
-        # self.speed_handler.start()
+        self.angle_handler.start()
+        self.speed_handler.start()
         self.video.iniciar()
 
-        # self.manage_stop()
+        self.manage_stop()
     
 
     def manage_stop(self):
