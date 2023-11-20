@@ -47,13 +47,19 @@ class Comunicador:
             except IndexError:
                 return None
 
-            
-    # Aquí habría que mandarle al servo la señal de dejar pasar 1 pelota pero
-    # hay que hacer girar los rodillos antes de mandar la señal de disparo
-    def disparar(self):
-        self.enviar_velocidad([1000, 1000, 1000]) # Girar los rodillos temporalmente para ver si funciona
-        time.sleep(0.5)
-        self.enviar_velocidad([0, 0, 0])
+
+    def enviar_disparo(self):
+        with self.serial_lock:
+            msgOn = f"True\n"
+            msgEncode = str.encode(msgOn)
+            self.arduino.write(msgEncode)
+
+
+    def disparar(self, velocidad, espera_caida_pelota=0.75):
+        self.enviar_velocidad(velocidades=velocidad)
+        self.enviar_disparo()
+        time.sleep(espera_caida_pelota) # Esperar para que le de tiempo a la pelota a caer
+        self.enviar_velocidad(velocidades=[0, 0, 0])
 
 
     def start_faulhabers(self):

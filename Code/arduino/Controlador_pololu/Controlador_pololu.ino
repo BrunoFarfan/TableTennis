@@ -11,6 +11,7 @@
 //-----------------------------------
 // Importar librerias
 #include "DualVNH5019MotorShield.h"
+#include <Servo.h>
 DualVNH5019MotorShield md;
 
 // Definicion de PINs
@@ -49,6 +50,13 @@ long error_anterior = 0;
 
 float Voltaje_in = 0;
 int pinInput;
+
+// Servo
+Servo servo;
+bool disparar = false;
+unsigned long t_act_servo = 0;
+unsigned long t_ant_servo = 0;
+unsigned long t_abierto = 1000000;
 
 // Variables lectura del serial
 String message = "";
@@ -89,6 +97,8 @@ void setup()
   pinMode(encoderPinB, INPUT);
   digitalWrite(encoderPinB, HIGH);       // Incluir una resistencia de pullup en le entrada
 
+  servo.attach(30); // servo
+
   attachInterrupt(digitalPinToInterrupt(encoderPinA), doEncoderA, CHANGE);  // encoder PIN A
   attachInterrupt(digitalPinToInterrupt(encoderPinB), doEncoderB, CHANGE);  // encoder PIN B
 
@@ -110,6 +120,7 @@ void loop() {
   if ((micros() - time_ant) >= Period)
   {
     newtime = micros();
+    t_act_servo = micros();
 
     //-----------------------------------
     // Ejemplo variable alterando cada 5 segundos
@@ -136,6 +147,7 @@ void loop() {
                                         // Programar un compensador de error
     cuentas_actuales = encoderPos;                                    
     serialReader(); // Función que majea el serial
+    func_disparar(); // Función que hace el disparo
     
     Voltaje_in= pid(cuentas_actuales, cuentas_ref, Kp, Ki, Kd, dt);
     if (Voltaje_in >= 0){
@@ -197,18 +209,38 @@ void serialReader(){
       receivedData = Serial.read(); // Lee un byte de datos      
       
       if (receivedData == '\n') { // Si se recibe un salto de línea, se considera el final del mensaje
-        angulo_ref = (String(message)).toInt();
-        if (angulo_ref > 50){angulo_ref = 50;}
-        if (angulo_ref < -50){angulo_ref = -50;}
-
-        error_acumulado = 0;
-        partida = valores_iniciales;
+        if (isdigit((String(message)).charAt(0)) or isdigit((String(message)).charAt(1))) {
+          angulo_ref = (String(message)).toInt();
+          if (angulo_ref > 50){
+            angulo_ref = 50;
+            }
+          if (angulo_ref < -50){
+            angulo_ref = -50;
+            }
+          error_acumulado = 0;
+          partida = valores_iniciales;
+        } else {
+          disparar = true;
+          t_ant_servo = t_act_servo;
+        }
         message = "";
       }
       else {
         message += receivedData; // Concatena el byte leído al mensaje
             }
       } 
+}
+
+void func_disparar() {
+  if (t_act_servo - t_ant_servo >= t_abierto) { // tiempo que se mantiene abierto
+    disparar = false;
+    t_ant_servo = t_act_servo;
+  } //this shit bussin fr fr
+  if (disparar) {
+    servo.write(90);
+  } else {
+    servo.write(0);
+  }
 }
 
 double pid(float cuentas_act, float cuentas_ref, float kp, float ki, float kd, float dT) {
