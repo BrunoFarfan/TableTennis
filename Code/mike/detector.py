@@ -240,7 +240,7 @@ class DetectorMovimientoColor:
         hsv_img = cv2.cvtColor(self.original, cv2.COLOR_BGR2HSV)
             
         if self.layers_count < self.max_layers:
-            self.filtrada = self.original
+            self.filtrada = self.original[:,:,0]
             self.temp_background = self.original
             self.background.pop(0)
             self.background.append(hsv_img)
