@@ -19,7 +19,7 @@ class Control:
         self.angulo = None
         
         self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True,
-                                       kwargs={"invertir": False})
+                                       kwargs={"invertir": True})
         self.shot_handler = th.Thread(target=self.realizar_disparo, daemon=True)
         self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
