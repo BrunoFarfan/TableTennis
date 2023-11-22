@@ -3,6 +3,8 @@ import threading as th
 from camara import Camara
 from comm import Comunicador
 import keyboard
+from tiros import diccionario_tiros
+import random
 
 
 class Control:
@@ -13,8 +15,11 @@ class Control:
                                        puerto_faulhaber2="/dev/cu.usbserial-1D1120",
                                        puerto_faulhaber1="/dev/cu.usbserial-1D1130",
                                        puerto_faulhaber0="/dev/cu.usbserial-1D1140")
+
+        self.angulo = None
         
-        self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
+        self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True,
+                                       kwargs={"invertir": False})
         self.shot_handler = th.Thread(target=self.realizar_disparo, daemon=True)
         self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
 
@@ -34,11 +39,13 @@ class Control:
         self.enviar_angulo(single=not self.loop, angulo=0)
 
 
-    def enviar_angulo(self, single=False, angulo=0):
+    def enviar_angulo(self, single=False, angulo=0, invertir=False):
         while self.loop:
-            angulo = self.video.generar_angulo()
-            if angulo != None:
-                self.comunicador.enviar_angulo(angulo)
+            self.angulo = self.video.generar_angulo()
+            if self.angulo != None:
+                if invertir:
+                    self.angulo = -self.angulo
+                self.comunicador.enviar_angulo(self.angulo)
         
         # Enviar un solo mensaje
         if single:
@@ -57,13 +64,43 @@ class Control:
                 self.comunicador.disparar(velocidad=vels)
 
     
-    # esta wea tiene que obtener la velocidad de algun dict o algo asi para no tener que darlas
-    # manualmente
-    def obtener_velocidad(self):
-        return self.spin2velocidad(x=12500)
+    def obtener_velocidad(self, modo="facil", prob_largo=0.5, variacion=0.1):
+        if self.angulo < -5:
+            lado = "izquierda"
+        elif -5 <= self.angulo and self.angulo <= 5:
+            lado = "centro"
+        else:
+            lado = "derecha"
+
+        if random.random() <= prob_largo:
+            largo = "largo"
+        else:
+            largo = "corto"
+
+        posibles_tiros = diccionario_tiros[largo][lado]
+
+        if modo == "facil":
+            x, y, h = self.spin_input2spin(posibles_tiros[0])
+            return self.spin2velocidad(x, y, h)
+        elif modo == "normal":
+            x, y, h = self.spin_input2spin(random.choice(posibles_tiros))
+            x += x * random.uniform(-variacion, variacion)
+            y += y * random.uniform(-variacion, variacion)
+            return self.spin2velocidad(x, y, h)
 
     
-    def spin2velocidad(self, x, y=0, h=False):
+    def spin_input2spin(self, string):
+        string = string.replace(" ", "").lower().split(",")
+
+        if len(string) > 1:
+            x, y, h = string[0], string[1].replace("h", ""), "h" in string[1]
+        else:
+            x, y, h = string[0], 0, False
+
+        return (x, y, h)
+
+    
+    def spin2velocidad(self, x, y=0, h=False, max_speed=30000):
         x, y = float(x), float(y)
         if h:
             r1 = x
@@ -73,7 +110,10 @@ class Control:
             r1 = (3 * x + 2 * x * y)/3
             r2 = (3 * x - x * y)/3
             r3 = (3 * x - x * y)/3
-        return [round(r1), round(r2), round(r3)]
+
+        velocidades = [round(r1), round(r2), round(r3)]
+        velocidades = [max(200, min(velocidad, max_speed)) for velocidad in velocidades] # V siempre entre 100 y max
+        return velocidades
 
 
     def enviar_velocidad(self, max_speed=30000): # Función temporal para mandar velocidades manualmente
@@ -81,15 +121,9 @@ class Control:
             spin_input = input("Velocidades (x,yh): ")
             try:
                 spin_input = spin_input.replace(" ", "").lower().split(",")
-                spin_input = spin_input
-
-                if len(spin_input) > 1:
-                    x, y, h = spin_input[0], spin_input[1].replace("h", ""), "h" in spin_input[1]
-                else:
-                    x, y, h = spin_input[0], 0, False
+                x, y, h = self.spin_input2spin(spin_input)
 
                 velocidades = self.spin2velocidad(x, y, h)
-                velocidades = [max(-max_speed, min(velocidad, max_speed)) for velocidad in velocidades]
                 self.comunicador.disparar(velocidades) # CAMBIADO A comunicador.disparar PARA QUE DISPARE SOLO LUEGO DE ENVIARLE LAS VELOCIDADES MANUALMENTE
             except ValueError:
                 print("Error: valores incorrectos para las velocidades")

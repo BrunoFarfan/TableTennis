@@ -102,4 +102,4 @@ class Comunicador:
                     msgEncode = str.encode(msgVel2)
                     self.faulhabers[2].write(msgEncode)
 
-                    print(f"Enviado {msgVel0, msgVel1, msgVel2}")
+                print(f"Enviado {self.velocidades_anteriores}")
