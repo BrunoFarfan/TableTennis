@@ -2,6 +2,7 @@ import time
 import serial
 import numpy as np
 import threading as th
+import re
 
 
 class Comunicador:
@@ -9,7 +10,7 @@ class Comunicador:
                  puerto_faulhaber1="COM22", puerto_faulhaber2="COM23",
                  baudrate_arduino=115200, baudrate_faulhabers=9600, timeout=3):
 
-        self.write_lock = th.Lock()
+        self.serial_lock = th.Lock()
         
         self.arduino = serial.Serial(port=puerto_arduino, baudrate=baudrate_arduino, timeout=timeout)
         self.faulhabers = [
@@ -26,7 +27,7 @@ class Comunicador:
 
     def enviar_angulo(self, angulo, espera=0):
         if angulo != None:
-            with self.write_lock:
+            with self.serial_lock:
                 time.sleep(espera)
                 msgOn = f"{round(angulo)}\n"
                 if abs(angulo - self.angulo_anterior) > 1:
@@ -36,8 +37,33 @@ class Comunicador:
                     self.angulo_anterior = angulo
 
 
+    def leer_error_angulo(self):
+        with self.serial_lock:
+            linea = self.arduino.readline().decode('utf-8').strip()
+            try:
+                error_actual = linea.split(",")[-2] # El penúltimo valor es el error
+                match = re.search(r'\b(\d+)\b', error_actual) # Buscar el número en el string
+                return int(match.group(0))
+            except IndexError:
+                return None
+
+
+    def enviar_disparo(self):
+        with self.serial_lock:
+            msgOn = f"True\n"
+            msgEncode = str.encode(msgOn)
+            self.arduino.write(msgEncode)
+
+
+    def disparar(self, velocidad, espera_caida_pelota=0.75):
+        self.enviar_velocidad(velocidades=velocidad)
+        self.enviar_disparo()
+        time.sleep(espera_caida_pelota) # Esperar para que le de tiempo a la pelota a caer
+        self.enviar_velocidad(velocidades=[0, 0, 0])
+
+
     def start_faulhabers(self):
-        with self.write_lock:
+        with self.serial_lock:
             msgOn = "en\n"
             for faulhaber in self.faulhabers:
                 msgEncode = str.encode(msgOn)
@@ -45,7 +71,7 @@ class Comunicador:
 
     
     def stop_faulhabers(self):
-        with self.write_lock:
+        with self.serial_lock:
             msgVel = "v0\n"
             msgOff = "di\n"
             for faulhaber in self.faulhabers:
@@ -57,10 +83,7 @@ class Comunicador:
     
     def enviar_velocidad(self, velocidades, n_iteraciones=20, t_aceleracion=1.5):
         if velocidades != None:
-            with self.write_lock:
-                msgVel0, msgVel1, msgVel2 = "No actualizado", "No actualizado", "No actualizado"
-                if len(velocidades) == 1:
-                    velocidades = [velocidades[0], velocidades[0], velocidades[0]]
+            with self.serial_lock:
                 velocidades = np.array(velocidades)
                 delta = (velocidades - self.velocidades_anteriores) // n_iteraciones
                 for _ in range(n_iteraciones):
