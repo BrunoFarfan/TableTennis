@@ -243,7 +243,8 @@ class DetectorMaestro():
     
     def filtrar(self):
         if self.modo == 0:
-            return self.filtroCara()
+            self.filtroMovimiento()
+            return self.filtroColor()
         elif self.modo == 1:
             return self.filtroColor()
         elif self.modo == 2:

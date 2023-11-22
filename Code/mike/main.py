@@ -8,7 +8,7 @@ import keyboard
 class Control:
     def __init__(self):
         self.loop = True # variable para controlar loops secundarios de threads
-        self.video = Camara(rango=np.array([5, 50, 50]), distancia=2.31)
+        self.video = Camara(rango=np.array([5, 50, 50]), distancia=2.31, movimiento=False)
         self.comunicador = Comunicador(puerto_arduino="/dev/cu.usbmodem14201",
                                        puerto_faulhaber2="/dev/cu.usbserial-1D1120",
                                        puerto_faulhaber1="/dev/cu.usbserial-1D1130",

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import keyboard
-from detector import DetectorColor, DetectorMovimiento
+from detector import DetectorColor, DetectorMovimiento, DetectorMovimientoColor
 
 
 ANCHO_CANCHA = 1.525
@@ -19,7 +19,7 @@ class Camara:
         if movimiento:
             self.detector_objetivo = DetectorMovimiento()
         else:
-            self.detector_objetivo = DetectorColor(rango)
+            self.detector_objetivo = DetectorMovimientoColor(rango=np.array([5, 50, 100]))
 
         if numero_camara is None:
             numero_camara = self.detectar_camara_externa()
