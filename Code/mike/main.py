@@ -39,7 +39,7 @@ class Control:
         self.enviar_angulo(single=not self.loop, angulo=0)
 
 
-    def enviar_angulo(self, single=False, angulo=0, invertir=False):
+    def enviar_angulo(self, single=False, angulo=0, invertir=True):
         while self.loop:
             self.angulo = self.video.generar_angulo()
             if self.angulo != None:
@@ -56,10 +56,10 @@ class Control:
     def realizar_disparo(self, tolerancia=21):
         while self.loop:
             error_angulo = self.comunicador.leer_error_angulo()
-            if error_angulo == None:
+            if error_angulo == None or self.angulo == None:
                 continue
-            #if error_angulo <= tolerancia or keyboard.is_pressed('f'):
-            if keyboard.is_pressed('f'):
+            if error_angulo <= tolerancia or keyboard.is_pressed('f'):
+            # if keyboard.is_pressed('f'):
                 vels = self.obtener_velocidad()
                 self.comunicador.disparar(velocidad=vels)
 
@@ -120,7 +120,6 @@ class Control:
         while self.loop:
             spin_input = input("Velocidades (x,yh): ")
             try:
-                spin_input = spin_input.replace(" ", "").lower().split(",")
                 x, y, h = self.spin_input2spin(spin_input)
 
                 velocidades = self.spin2velocidad(x, y, h)
