@@ -60,8 +60,8 @@ class Control:
                 continue
             if error_angulo <= tolerancia or keyboard.is_pressed('f'):
             # if keyboard.is_pressed('f'):
-                vels = self.obtener_velocidad()
-                self.comunicador.disparar(velocidad=vels)
+                vels = self.obtener_velocidad(modo="normal")
+                self.comunicador.disparar(velocidad=vels, detener=False)
 
     
     def obtener_velocidad(self, modo="facil", prob_largo=0.5, variacion=0.1):
@@ -97,11 +97,11 @@ class Control:
         else:
             x, y, h = string[0], 0, False
 
+        x, y = float(x), float(y)
         return (x, y, h)
 
     
     def spin2velocidad(self, x, y=0, h=False, max_speed=30000):
-        x, y = float(x), float(y)
         if h:
             r1 = x
             r2 = (3 * x + np.sqrt(3) * x  * y)/3
