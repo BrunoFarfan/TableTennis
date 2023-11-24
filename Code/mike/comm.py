@@ -38,17 +38,6 @@ class Comunicador:
                     self.angulo_anterior = angulo
 
 
-    def leer_error_angulo(self):
-        with self.lock_arduino:
-            linea = self.arduino.readline().decode('utf-8').strip()
-            try:
-                error_actual = linea.split(",")[-2] # El penúltimo valor es el error
-                match = re.search(r'\b(\d+)\b', error_actual) # Buscar el número en el string
-                return int(match.group(0))
-            except IndexError:
-                return None
-
-
     def enviar_disparo(self):
         with self.lock_faulhabers:
             msgOn = f"True\n"
