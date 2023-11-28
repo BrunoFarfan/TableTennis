@@ -157,13 +157,14 @@ class DetectorMaestro():
 
     def table(self):
         gray_img = cv2.cvtColor(self.original, cv2.COLOR_BGR2GRAY)
-        self.edged = cv2.Canny(gray_img, 500, 1000, None, 5)
+        self.edged = cv2.Canny(gray_img, 200, 1000, None, 7)
         self.lines = cv2.HoughLines(self.edged, 2, np.pi / 360, 200, None, 0, 0)
         
                        
         if self.lines is not None:
                 pt1_h = pt1_d1 = pt1_d2 = 0
-                n_h = n_d1 = n_d2 = -1000
+                n_h = 1000
+                n_d1 = n_d2 = -1000
                 for i in range(0, len(self.lines)):
                     rho = self.lines[i][0][0]
                     theta = self.lines[i][0][1]
@@ -177,7 +178,7 @@ class DetectorMaestro():
                         n_h0 = y0 + x0*m_h0
                         pt1_h0 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
                         pt2_h0 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-                        if n_h0 > n_h:
+                        if n_h0 < n_h and y0 > 300:
                             pt1_h = pt1_h0
                             pt2_h = pt2_h0
                             m_h   = m_h0
@@ -192,7 +193,7 @@ class DetectorMaestro():
                         n_d10 = y0 + x0*m_d10
                         pt1_d10 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
                         pt2_d10 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-                        if n_d10 < n_d1 or n_d1 == -1000:
+                        if (n_d10 < n_d1 or n_d1 == -1000)  and y0 > 300:
                             pt1_d1 = pt1_d10
                             pt2_d1 = pt2_d10
                             m_d1   = m_d10
@@ -207,7 +208,7 @@ class DetectorMaestro():
                         n_d20 = y0 + x0*m_d20
                         pt1_d20 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
                         pt2_d20 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-                        if n_d20 > n_d2:
+                        if n_d20 > n_d2 and y0 > 300:
                             pt1_d2 = pt1_d20
                             pt2_d2 = pt2_d20
                             m_d2   = m_d20
@@ -242,7 +243,8 @@ class DetectorMaestro():
     
     def filtrar(self):
         if self.modo == 0:
-            return self.filtroCara()
+            self.filtroMovimiento()
+            return self.filtroColor()
         elif self.modo == 1:
             return self.filtroColor()
         elif self.modo == 2:
