@@ -18,18 +18,17 @@ class Control:
                                        puerto_faulhaber0="/dev/cu.usbserial-1D1140")
 
         self.angulo = None
-        self.angulo_objetivo = self.angulo
+        self.angulo_objetivo = 0
+        self.auto = auto
         
         self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
-        self.shot_handler = th.Thread(target=self.realizar_disparo, daemon=True,
-                                      kwargs={"auto": auto})
-        self.speed_handler = th.Thread(target=self.enviar_velocidad, daemon=True)
+        self.shot_handler = th.Thread(target=self.realizar_disparo, daemon=True)
 
         self.selector_dificultad(dificultad)
 
     
     def selector_dificultad(self, dificultad):
-        with open(os.path.join("Code", "mike", "parametros.json")) as f:
+        with open(os.path.join("mike", "parametros.json")) as f:
             self.params = json.load(f)
         self.periodo_disparo = self.params["dificultad"][dificultad]["periodo"]
         self.modo_angulo = self.params["dificultad"][dificultad]["modo_angulo"]
@@ -40,7 +39,6 @@ class Control:
         self.loop = True # variable para controlar loops secundarios de threads
         self.angle_handler.start()
         self.shot_handler.start()
-        self.speed_handler.start()
         self.video.iniciar()
     
 
@@ -58,6 +56,11 @@ class Control:
                     self.angulo_objetivo = self.angulo
                 elif self.modo_angulo == "invertido":
                     self.angulo_objetivo = -self.angulo
+                elif self.modo_angulo == "esquinado":
+                    if np.abs(self.angulo - self.angulo_objetivo) < 7.5 and self.angulo < 0:
+                        self.angulo_objetivo = 15
+                    elif np.abs(self.angulo - self.angulo_objetivo) < 7.5 and self.angulo > 0:
+                        self.angulo_objetivo = -15
                 self.comunicador.enviar_angulo(self.angulo_objetivo)
         
         # Enviar un solo mensaje
@@ -65,17 +68,7 @@ class Control:
             self.comunicador.enviar_angulo(angulo)
 
     
-    def realizar_disparo(self, auto=True, detener_faulhabers=True):
-        t_ultimo_disparo = time.time()
-        while self.loop:
-            if ((auto and time.time() - t_ultimo_disparo >= self.periodo_disparo and self.angulo != None)
-            or keyboard.is_pressed('f')):
-                t_ultimo_disparo = time.time()
-                vels = self.obtener_velocidad(modo="normal")
-                self.comunicador.disparar(velocidad=vels, detener=detener_faulhabers)
-
-    
-    def obtener_velocidad(self, prob_largo=0.5, variacion=0.1):
+    def obtener_velocidad(self, prob_largo=2/3, variacion=0.1):
         if self.angulo_objetivo < -5:
             lado = "izquierda"
         elif -5 <= self.angulo_objetivo and self.angulo_objetivo <= 5:
@@ -93,7 +86,7 @@ class Control:
         if self.dificultad == "facil":
             x, y, h = self.spin_input2spin(posibles_tiros[0])
             return self.spin2velocidad(x, y, h)
-        elif self.dificultad == "normal":
+        elif self.dificultad == "normal" or self.dificultad == "dificil":
             x, y, h = self.spin_input2spin(random.choice(posibles_tiros))
             x += x * random.uniform(-variacion, variacion)
             y += y * random.uniform(-variacion, variacion)
@@ -123,20 +116,40 @@ class Control:
             r3 = (3 * x - x * y)/3
 
         velocidades = [round(r1), round(r2), round(r3)]
-        velocidades = [max(200, min(velocidad, max_speed)) for velocidad in velocidades] # V siempre entre 100 y max
+        velocidades = [max(200, min(velocidad, max_speed)) for velocidad in velocidades]
         return velocidades
 
 
-    def enviar_velocidad(self): # Función temporal para mandar velocidades manualmente
-        while self.loop:
-            spin_input = input("Velocidades (x,yh): ")
-            try:
-                x, y, h = self.spin_input2spin(spin_input)
+    def enviar_velocidad(self): # Función mandar velocidades manualmente y ejecutar un disparo
+        spin_input = input("Velocidad (x,yh): ")
+        try:
+            x, y, h = self.spin_input2spin(spin_input)
 
-                velocidades = self.spin2velocidad(x, y, h)
-                self.comunicador.disparar(velocidades) # CAMBIADO A comunicador.disparar PARA QUE DISPARE SOLO LUEGO DE ENVIARLE LAS VELOCIDADES MANUALMENTE
-            except ValueError:
-                print("Error: valores incorrectos para las velocidades")
+            velocidades = self.spin2velocidad(x, y, h)
+            self.comunicador.disparar(velocidades)
+        except ValueError:
+            print("Error: valores incorrectos para las velocidades")
+
+    
+    def realizar_disparo(self):
+        t_ultimo_disparo = time.time()
+        while self.loop:
+            if keyboard.is_pressed('m'):
+                self.auto = False
+            elif keyboard.is_pressed('a'):
+                self.auto = True
+
+            diff_tiempo = time.time() - t_ultimo_disparo
+
+            if ((self.auto and diff_tiempo >= self.periodo_disparo and self.angulo != None)
+            or keyboard.is_pressed('f')):
+                t_ultimo_disparo = time.time()
+                vels = self.obtener_velocidad(modo="normal")
+                self.comunicador.disparar(velocidad=vels, detener= not self.auto)
+
+            elif keyboard.is_pressed('v'):
+                self.enviar_velocidad()
+
 
 
 if __name__ == "__main__":

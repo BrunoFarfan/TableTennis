@@ -5,6 +5,9 @@
         },
         "normal": {
             "periodo": 1.5, "modo_angulo": "invertido"
+        },
+        "dificil": {
+            "periodo": 0.75, "modo_angulo": "esquinado"
         }
     },
 
