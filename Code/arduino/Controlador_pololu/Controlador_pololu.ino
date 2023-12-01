@@ -97,7 +97,7 @@ void setup()
   pinMode(encoderPinB, INPUT);
   digitalWrite(encoderPinB, HIGH);       // Incluir una resistencia de pullup en le entrada
 
-  servo.attach(30); // servo
+  servo.attach(30); // servo al pin 30 del arduino
 
   attachInterrupt(digitalPinToInterrupt(encoderPinA), doEncoderA, CHANGE);  // encoder PIN A
   attachInterrupt(digitalPinToInterrupt(encoderPinB), doEncoderB, CHANGE);  // encoder PIN B

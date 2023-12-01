@@ -20,15 +20,27 @@ class Control:
         self.angulo = None
         self.angulo_objetivo = 0
         self.auto = auto
+        print("Modo auto: ", auto)
         
         self.angle_handler = th.Thread(target=self.enviar_angulo, daemon=True)
         self.shot_handler = th.Thread(target=self.realizar_disparo, daemon=True)
+        self.general_input_handler = th.Thread(target=self.inputs_generales, daemon=True)
 
         self.selector_dificultad(dificultad)
 
+
+    def inputs_generales(self):
+        while self.loop:
+            if keyboard.is_pressed('m'):
+                self.auto = False
+                print("Modo manual")
+            elif keyboard.is_pressed('a'):
+                self.auto = True
+                print("Modo automatico")
+
     
     def selector_dificultad(self, dificultad):
-        with open(os.path.join("mike", "parametros.json")) as f:
+        with open(os.path.join("Code", "mike", "parametros.json")) as f:
             self.params = json.load(f)
         self.periodo_disparo = self.params["dificultad"][dificultad]["periodo"]
         self.modo_angulo = self.params["dificultad"][dificultad]["modo_angulo"]
@@ -39,6 +51,7 @@ class Control:
         self.loop = True # variable para controlar loops secundarios de threads
         self.angle_handler.start()
         self.shot_handler.start()
+        self.general_input_handler.start()
         self.video.iniciar()
     
 
@@ -86,6 +99,7 @@ class Control:
         if self.dificultad == "facil":
             x, y, h = self.spin_input2spin(posibles_tiros[0])
             return self.spin2velocidad(x, y, h)
+
         elif self.dificultad == "normal" or self.dificultad == "dificil":
             x, y, h = self.spin_input2spin(random.choice(posibles_tiros))
             x += x * random.uniform(-variacion, variacion)
@@ -134,18 +148,14 @@ class Control:
     def realizar_disparo(self):
         t_ultimo_disparo = time.time()
         while self.loop:
-            if keyboard.is_pressed('m'):
-                self.auto = False
-            elif keyboard.is_pressed('a'):
-                self.auto = True
-
             diff_tiempo = time.time() - t_ultimo_disparo
 
             if ((self.auto and diff_tiempo >= self.periodo_disparo and self.angulo != None)
             or keyboard.is_pressed('f')):
                 t_ultimo_disparo = time.time()
-                vels = self.obtener_velocidad(modo="normal")
-                self.comunicador.disparar(velocidad=vels, detener= not self.auto)
+                print("Disparando")
+                vels = self.obtener_velocidad()
+                self.comunicador.disparar(velocidad=vels, detener=not self.auto)
 
             elif keyboard.is_pressed('v'):
                 self.enviar_velocidad()
@@ -153,6 +163,6 @@ class Control:
 
 
 if __name__ == "__main__":
-    control = Control()
+    control = Control(dificultad="dificil")
     control.start()
     control.manage_stop()
