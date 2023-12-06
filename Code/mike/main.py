@@ -54,6 +54,7 @@ class Control:
         self.periodo_disparo = self.params["dificultad"][dificultad]["periodo"]
         self.modo_angulo = self.params["dificultad"][dificultad]["modo_angulo"]
         self.dificultad = dificultad
+        print(f"Dificultad: {self.dificultad}")
 
 
     def start(self):
