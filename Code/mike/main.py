@@ -128,7 +128,7 @@ class Control:
         return (x, y, h)
 
     
-    def spin2velocidad(self, x, y=0, h=False, max_speed=30000):
+    def spin2velocidad(self, x, y=0, h=False, max_speed=15000):
         if h:
             r1 = x
             r2 = (3 * x + np.sqrt(3) * x  * y)/3
