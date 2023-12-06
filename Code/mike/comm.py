@@ -15,7 +15,7 @@ class Comunicador:
         
         self.arduino = serial.Serial(port=puerto_arduino, baudrate=baudrate_arduino, timeout=timeout)
         self.faulhabers = [
-            serial.Serial(port=puerto_faulhaber0, baudrate=baudrate_faulhabers, timeout=timeout),
+            # serial.Serial(port=puerto_faulhaber0, baudrate=baudrate_faulhabers, timeout=timeout),
             serial.Serial(port=puerto_faulhaber1, baudrate=baudrate_faulhabers, timeout=timeout),
             serial.Serial(port=puerto_faulhaber2, baudrate=baudrate_faulhabers, timeout=timeout)
         ]
@@ -85,12 +85,12 @@ class Comunicador:
                     msgEncode = str.encode(msgVel0)
                     self.faulhabers[0].write(msgEncode)
 
-                    msgVel1 = f"v{round(self.velocidades_anteriores[1])}\n"
-                    msgEncode = str.encode(msgVel1)
-                    self.faulhabers[1].write(msgEncode)
+                    # msgVel1 = f"v{round(self.velocidades_anteriores[1])}\n"
+                    # msgEncode = str.encode(msgVel1)
+                    # self.faulhabers[1].write(msgEncode)
 
-                    msgVel2 = f"v{-round(self.velocidades_anteriores[2])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
+                    msgVel2 = f"v{-round(self.velocidades_anteriores[-1])}\n" # EL TERCER MOTOR TIENE UN MENOS PORQUE TIENE QUE GIRAR EN EL SENTIDO OPUESTO
                     msgEncode = str.encode(msgVel2)
-                    self.faulhabers[2].write(msgEncode)
+                    self.faulhabers[-1].write(msgEncode)
 
                 print(f"Enviado {self.velocidades_anteriores}")
