@@ -7,6 +7,7 @@ import random
 import time
 import json
 import os
+import re
 
 
 class Control:
@@ -34,9 +35,17 @@ class Control:
             if keyboard.is_pressed('m'):
                 self.auto = False
                 print("Modo manual")
+                self.comunicador.enviar_velocidad([0, 0, 0])
             elif keyboard.is_pressed('a'):
                 self.auto = True
                 print("Modo automatico")
+
+            elif keyboard.is_pressed('e'):
+                self.selector_dificultad("facil")
+            elif keyboard.is_pressed('n'):
+                self.selector_dificultad("normal")
+            elif keyboard.is_pressed('h'):
+                self.selector_dificultad("dificil")
 
     
     def selector_dificultad(self, dificultad):
@@ -45,6 +54,7 @@ class Control:
         self.periodo_disparo = self.params["dificultad"][dificultad]["periodo"]
         self.modo_angulo = self.params["dificultad"][dificultad]["modo_angulo"]
         self.dificultad = dificultad
+        print(f"Dificultad: {self.dificultad}")
 
 
     def start(self):
@@ -108,7 +118,7 @@ class Control:
 
     
     def spin_input2spin(self, string):
-        string = string.replace(" ", "").lower().split(",")
+        string = re.sub(r'[vV ]', '', string).lower().split(',')
 
         if len(string) > 1:
             x, y, h = string[0], string[1].replace("h", ""), "h" in string[1]
